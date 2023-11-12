@@ -148,19 +148,19 @@ func (m *Main) Run(args ...string) error {
 // Usage returns the help message.
 func (m *Main) Usage() string {
 	return strings.TrimLeft(`
-Bbolt is a tool for inspecting bbolt databases.
+boltdb is a tool for inspecting boltdb databases.
 
 Usage:
 
-	bbolt command [arguments]
+	boltdb command [arguments]
 
 The commands are:
 
-    version     print the current version of bbolt
-    bench       run synthetic benchmark against bbolt
+    version     print the current version of boltdb
+    bench       run synthetic benchmark against boltdb
     buckets     print a list of buckets
-    check       verifies integrity of bbolt database
-    compact     copies a bbolt database, compacting it in the process
+    check       verifies integrity of boltdb database
+    compact     copies a boltdb database, compacting it in the process
     dump        print a hexadecimal dump of a single page
     get         print the value of a key in a bucket
     info        print basic info
@@ -170,9 +170,9 @@ The commands are:
     pages       print list of pages with their types
     page-item   print the key and value of a page item.
     stats       iterate over all pages and generate usage stats
-    surgery     perform surgery on bbolt database
+    surgery     perform surgery on boltdb database
 
-Use "bbolt [command] -h" for more information about a command.
+Use "boltdb [command] -h" for more information about a command.
 `, "\n")
 }
 

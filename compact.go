@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 // Compact will create a copy of the source DB and in the destination DB. This may
 // reclaim space that the source database no longer has use for. txMaxSize can be

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	bolt "github.com/openkvlab/boltdb"
-	main "github.com/openkvlab/boltdb/cmd/bbolt"
+	main "github.com/openkvlab/boltdb/cmd/boltdb"
 	"github.com/openkvlab/boltdb/internal/btesting"
 	"github.com/openkvlab/boltdb/internal/common"
 )

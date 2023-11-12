@@ -1,7 +1,7 @@
 //go:build aix
 // +build aix
 
-package bbolt
+package boltdb
 
 import (
 	"fmt"

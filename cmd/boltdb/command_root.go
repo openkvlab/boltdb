@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	cliName        = "bbolt"
-	cliDescription = "A simple command line tool for inspecting bbolt databases"
+	cliName        = "boltdb"
+	cliDescription = "A simple command line tool for inspecting boltdb databases"
 )
 
 func NewRootCommand() *cobra.Command {

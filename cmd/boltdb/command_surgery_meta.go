@@ -35,7 +35,7 @@ func newSurgeryMetaCommand() *cobra.Command {
 
 func newSurgeryMetaValidateCommand() *cobra.Command {
 	metaValidateCmd := &cobra.Command{
-		Use:   "validate <bbolt-file> [options]",
+		Use:   "validate <boltdb-file> [options]",
 		Short: "Validate both meta pages",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -129,7 +129,7 @@ func (o *surgeryMetaUpdateOptions) Validate() error {
 func newSurgeryMetaUpdateCommand() *cobra.Command {
 	var o surgeryMetaUpdateOptions
 	metaUpdateCmd := &cobra.Command{
-		Use:   "update <bbolt-file> [options]",
+		Use:   "update <boltdb-file> [options]",
 		Short: "Update fields in meta pages",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {

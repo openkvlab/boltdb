@@ -1,7 +1,7 @@
 //go:build mips || mipsle
 // +build mips mipsle
 
-package bbolt
+package boltdb
 
 // maxMapSize represents the largest mmap size supported by Bolt.
 const maxMapSize = 0x40000000 // 1GB

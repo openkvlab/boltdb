@@ -11,10 +11,10 @@ import (
 func newVersionCobraCommand() *cobra.Command {
 	versionCmd := &cobra.Command{
 		Use:   "version",
-		Short: "print the current version of bbolt",
-		Long:  "print the current version of bbolt",
+		Short: "print the current version of boltdb",
+		Long:  "print the current version of boltdb",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("bbolt Version: %s\n", version.Version)
+			fmt.Printf("boltdb Version: %s\n", version.Version)
 			fmt.Printf("Go Version: %s\n", runtime.Version())
 			fmt.Printf("Go OS/Arch: %s/%s\n", runtime.GOOS, runtime.GOARCH)
 		},

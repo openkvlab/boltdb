@@ -1,4 +1,4 @@
-package bbolt_test
+package boltdb_test
 
 import (
 	"bytes"
@@ -222,7 +222,7 @@ func mustCreateDB(t *testing.T, o *bolt.Options) *bolt.DB {
 func mustReOpenDB(t *testing.T, db *bolt.DB, o *bolt.Options) *bolt.DB {
 	f := db.Path()
 
-	t.Logf("Closing bbolt DB at: %s", f)
+	t.Logf("Closing boltdb DB at: %s", f)
 	err := db.Close()
 	require.NoError(t, err)
 
@@ -230,7 +230,7 @@ func mustReOpenDB(t *testing.T, db *bolt.DB, o *bolt.Options) *bolt.DB {
 }
 
 func mustOpenDB(t *testing.T, dbPath string, o *bolt.Options) *bolt.DB {
-	t.Logf("Opening bbolt DB at: %s", dbPath)
+	t.Logf("Opening boltdb DB at: %s", dbPath)
 	if o == nil {
 		o = bolt.DefaultOptions
 	}
@@ -758,7 +758,7 @@ TestConcurrentRepeatableRead verifies repeatable read. The case
 intentionally creates a scenario that read and write transactions
 are interleaved. It performs several writing operations after starting
 each long-running read transaction to ensure it has a larger txid
-than previous read transaction. It verifies that bbolt correctly
+than previous read transaction. It verifies that boltdb correctly
 releases free pages, and will not pollute (e.g. prematurely release)
 any pages which are still being used by any read transaction.
 */
@@ -851,7 +851,7 @@ func TestConcurrentRepeatableRead(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			// bbolt will not release free pages directly after committing
+			// boltdb will not release free pages directly after committing
 			// a writing transaction; instead all pages freed are putting
 			// into a pending list. Accordingly, the free pages might not
 			// be able to be reused by following writing transactions. So

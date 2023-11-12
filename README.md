@@ -1,4 +1,4 @@
-bbolt
+boltdb
 =====
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/openkvlab/boltdb?style=flat-square)](https://goreportcard.com/report/github.com/openkvlab/boltdb)
@@ -6,10 +6,10 @@ bbolt
 [![Releases](https://img.shields.io/github/release/openkvlab/boltdb/all.svg?style=flat-square)](https://github.com/openkvlab/boltdb/releases)
 [![LICENSE](https://img.shields.io/github/license/openkvlab/boldb.svg?style=flat-square)](https://github.com/openkvlab/boltdb/blob/main/LICENSE)
 
-bbolt is a fork of [Ben Johnson's][gh_ben] [Bolt][bolt] key/value
+boltdb is a fork of [Ben Johnson's][gh_ben] [Bolt][bolt] key/value
 store. The purpose of this fork is to provide the Go community with an active
 maintenance and development target for Bolt; the goal is improved reliability
-and stability. bbolt includes bug fixes, performance enhancements, and features
+and stability. boltdb includes bug fixes, performance enhancements, and features
 not found in Bolt while preserving backwards compatibility with the Bolt API.
 
 Bolt is a pure Go key/value store inspired by [Howard Chu's][hyc_symas]
@@ -36,7 +36,7 @@ Shopify and Heroku use Bolt-backed services every day.
 
 ## Project versioning
 
-bbolt uses [semantic versioning](http://semver.org).
+boltdb uses [semantic versioning](http://semver.org).
 API should not change between patch and minor releases.
 New minor versions may add additional features to the API.
 
@@ -84,19 +84,19 @@ This will retrieve the library and update your `go.mod` and `go.sum` files.
 
 To run the command line utility, execute:
 ```sh
-$ go run github.com/openkvlab/boltdb/cmd/bbolt@latest
+$ go run github.com/openkvlab/boltdb/cmd/boltdb@latest
 ```
 
-Run `go install` to install the `bbolt` command line utility into
+Run `go install` to install the `boltdb` command line utility into
 your `$GOBIN` path, which defaults to `$GOPATH/bin` or `$HOME/go/bin` if the
 `GOPATH` environment variable is not set.
 ```sh
-$ go install github.com/openkvlab/boltdb/cmd/bbolt@latest
+$ go install github.com/openkvlab/boltdb/cmd/boltdb@latest
 ```
 
-### Importing bbolt
+### Importing boltdb
 
-To use bbolt as an embedded key-value store, import as:
+To use boltdb as an embedded key-value store, import as:
 
 ```go
 import bolt "github.com/openkvlab/boltdb"
@@ -955,20 +955,20 @@ Below is a list of public, open source projects that use Bolt:
 * [GoWebApp](https://github.com/josephspurrier/gowebapp) - A basic MVC web application in Go using BoltDB.
 * [GoShort](https://github.com/pankajkhairnar/goShort) - GoShort is a URL shortener written in Golang and BoltDB for persistent key/value storage and for routing it's using high performent HTTPRouter.
 * [gopherpit](https://github.com/gopherpit/gopherpit) - A web service to manage Go remote import paths with custom domains
-* [gokv](https://github.com/philippgille/gokv) - Simple key-value store abstraction and implementations for Go (Redis, Consul, etcd, bbolt, BadgerDB, LevelDB, Memcached, DynamoDB, S3, PostgreSQL, MongoDB, CockroachDB and many more)
+* [gokv](https://github.com/philippgille/gokv) - Simple key-value store abstraction and implementations for Go (Redis, Consul, etcd, boltdb, BadgerDB, LevelDB, Memcached, DynamoDB, S3, PostgreSQL, MongoDB, CockroachDB and many more)
 * [Gitchain](https://github.com/gitchain/gitchain) - Decentralized, peer-to-peer Git repositories aka "Git meets Bitcoin".
 * [InfluxDB](https://influxdata.com) - Scalable datastore for metrics, events, and real-time analytics.
 * [ipLocator](https://github.com/AndreasBriese/ipLocator) - A fast ip-geo-location-server using bolt with bloom filters.
 * [ipxed](https://github.com/kelseyhightower/ipxed) - Web interface and api for ipxed.
 * [Ironsmith](https://github.com/timshannon/ironsmith) - A simple, script-driven continuous integration (build - > test -> release) tool, with no external dependencies
 * [Kala](https://github.com/ajvb/kala) - Kala is a modern job scheduler optimized to run on a single node. It is persistent, JSON over HTTP API, ISO 8601 duration notation, and dependent jobs.
-* [Key Value Access Language (KVAL)](https://github.com/kval-access-language) - A proposed grammar for key-value datastores offering a bbolt binding.
+* [Key Value Access Language (KVAL)](https://github.com/kval-access-language) - A proposed grammar for key-value datastores offering a boltdb binding.
 * [LedisDB](https://github.com/siddontang/ledisdb) - A high performance NoSQL, using Bolt as optional storage.
 * [lru](https://github.com/crowdriff/lru) - Easy to use Bolt-backed Least-Recently-Used (LRU) read-through cache with chainable remote stores.
 * [mbuckets](https://github.com/abhigupta912/mbuckets) - A Bolt wrapper that allows easy operations on multi level (nested) buckets.
 * [MetricBase](https://github.com/msiebuhr/MetricBase) - Single-binary version of Graphite.
 * [MuLiFS](https://github.com/dankomiocevic/mulifs) - Music Library Filesystem creates a filesystem to organise your music files.
-* [NATS](https://github.com/nats-io/nats-streaming-server) - NATS Streaming uses bbolt for message and metadata storage.
+* [NATS](https://github.com/nats-io/nats-streaming-server) - NATS Streaming uses boltdb for message and metadata storage.
 * [Prometheus Annotation Server](https://github.com/oliver006/prom_annotation_server) - Annotation server for PromDash & Prometheus service monitoring system.
 * [Rain](https://github.com/cenkalti/rain) - BitTorrent client and library.
 * [reef-pi](https://github.com/reef-pi/reef-pi) - reef-pi is an award winning, modular, DIY reef tank controller using easy to learn electronics based on a Raspberry Pi.

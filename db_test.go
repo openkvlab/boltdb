@@ -1,4 +1,4 @@
-package bbolt_test
+package boltdb_test
 
 import (
 	"bytes"
@@ -65,7 +65,7 @@ func TestOpen(t *testing.T) {
 	}
 }
 
-// Regression validation for https://github.com/etcd-io/bbolt/pull/122.
+// Regression validation for https://github.com/etcd-io/boltdb/pull/122.
 // Tests multiple goroutines simultaneously opening a database.
 func TestOpen_MultipleGoroutines(t *testing.T) {
 	if testing.Short() {

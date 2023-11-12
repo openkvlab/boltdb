@@ -1,7 +1,7 @@
 //go:build ppc
 // +build ppc
 
-package bbolt
+package boltdb
 
 // maxMapSize represents the largest mmap size supported by Bolt.
 const maxMapSize = 0x7FFFFFFF // 2GB

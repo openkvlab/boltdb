@@ -1,8 +1,8 @@
-# Introduction to bbolt command line
+# Introduction to boltdb command line
 
-`bbolt` provides a command line utility for inspecting and manipulating bbolt database files. To install bbolt command-line please refer [here](https://github.com/openkvlab/boltdb#installing)
+`boltdb` provides a command line utility for inspecting and manipulating boltdb database files. To install boltdb command-line please refer [here](https://github.com/openkvlab/boltdb#installing)
 
-**Note**: [etcd](https://github.com/etcd-io/etcd) uses bbolt as its backend storage engine. In this document, we take etcd as an example to demonstrate the usage of bbolt commands. Refer to [install etcd](https://etcd.io/docs/v3.5/install/) for installing etcd.
+**Note**: [etcd](https://github.com/etcd-io/etcd) uses boltdb as its backend storage engine. In this document, we take etcd as an example to demonstrate the usage of boltdb commands. Refer to [install etcd](https://etcd.io/docs/v3.5/install/) for installing etcd.
 
 1. Start a single member etcd cluster with this command below:
 
@@ -17,7 +17,7 @@
     default.etcd
     └── member
         ├── snap
-        │   └── db // this is bbolt database file
+        │   └── db // this is boltdb database file
         └── wal
             └── 0000000000000000-0000000000000000.wal
 
@@ -25,26 +25,26 @@
     ```
 
 2. Put some dummy data using [etcdctl](https://github.com/etcd-io/etcd/tree/main/etcdctl).
-3. Stop the etcd instance. Note a bbolt database file can only be opened by one read-write process, because it is exclusively locked when opened.
+3. Stop the etcd instance. Note a boltdb database file can only be opened by one read-write process, because it is exclusively locked when opened.
 
 ## Usage
 
-- `bbolt command [arguments]`
+- `boltdb command [arguments]`
 
 ### help
 
 - help will print information about that command
 
   ```bash
-  $bbolt help
+  $boltdb help
 
   The commands are:
 
-      version     prints the current version of bbolt
-      bench       run synthetic benchmark against bbolt
+      version     prints the current version of boltdb
+      bench       run synthetic benchmark against boltdb
       buckets     print a list of buckets
-      check       verifies integrity of bbolt database
-      compact     copies a bbolt database, compacting it in the process
+      check       verifies integrity of boltdb database
+      compact     copies a boltdb database, compacting it in the process
       dump        print a hexadecimal dump of a single page
       get         print the value of a key in a bucket
       info        print basic info
@@ -54,54 +54,54 @@
       pages       print list of pages with their types
       page-item   print the key and value of a page item.
       stats       iterate over all pages and generate usage stats
-      surgery     perform surgery on bbolt database
+      surgery     perform surgery on boltdb database
   ```
 
-- you can use `help` with any command: `bbolt [command] -h` for more information about command.
+- you can use `help` with any command: `boltdb [command] -h` for more information about command.
 
-## Analyse bbolt database with bbolt command line
+## Analyse boltdb database with boltdb command line
 
 ### version
 
-- `version` print the current version information of bbolt command-line.
+- `version` print the current version information of boltdb command-line.
 - usage:
-  `bbolt version`
+  `boltdb version`
 
   Example:
   
   ```bash
-  $bbolt version
-  bbolt version: 1.3.7
+  $boltdb version
+  boltdb version: 1.3.7
   Go Version: go1.21.1
   Go OS/Arch: darwin/arm64
   ```
 
 ### info
 
-- `info` print the basic information about the given Bbolt database.
+- `info` print the basic information about the given boltdb database.
 - usage:
-  `bbolt info [path to the bbolt database]`
+  `boltdb info [path to the boltdb database]`
 
     Example:
 
     ```bash
-    $bbolt info ~/default.etcd/member/snap/db
+    $boltdb info ~/default.etcd/member/snap/db
     Page Size: 4096
     ```
 
   - **note**: page size is given in bytes
-  - Bbolt database is using page size of 4KB
+  - boltdb database is using page size of 4KB
 
 ### buckets
 
-- `buckets` print a list of buckets of Bbolt database is currently having. Find more information on buckets [here](https://github.com/openkvlab/boltdb#using-buckets)
+- `buckets` print a list of buckets of boltdb database is currently having. Find more information on buckets [here](https://github.com/openkvlab/boltdb#using-buckets)
 - usage:
-  `bbolt buckets [path to the bbolt database]`
+  `boltdb buckets [path to the boltdb database]`
 
     Example:
 
     ```bash
-    $bbolt buckets ~/default.etcd/member/snap/db
+    $boltdb buckets ~/default.etcd/member/snap/db
     alarm
     auth
     authRoles
@@ -114,18 +114,18 @@
     meta
     ```
 
-  - It means when you start an etcd, it creates these `10` buckets using bbolt database.
+  - It means when you start an etcd, it creates these `10` buckets using boltdb database.
 
 ### check
 
 - `check` opens a database at a given `[PATH]` and runs an exhaustive check to verify that all pages are accessible or are marked as freed. It also verifies that no pages are double referenced.
 - usage:
-  `bbolt check [path to the bbolt database]`
+  `boltdb check [path to the boltdb database]`
 
     Example:
 
     ```bash
-    $bbolt check ~/default.etcd/member/snap/db
+    $boltdb check ~/default.etcd/member/snap/db
     ok
     ```
 
@@ -133,14 +133,14 @@
 
 ### stats
 
-- To gather essential statistics about the bbolt database: `stats` performs an extensive search of the database to track every page reference. It starts at the current meta page and recursively iterates through every accessible bucket.
+- To gather essential statistics about the boltdb database: `stats` performs an extensive search of the database to track every page reference. It starts at the current meta page and recursively iterates through every accessible bucket.
 - usage:
-  `bbolt stats [path to the bbolt database]`
+  `boltdb stats [path to the boltdb database]`
 
   Example:
 
   ```bash
-  $bbolt stats ~/default.etcd/member/snap/db
+  $boltdb stats ~/default.etcd/member/snap/db
   Aggregate statistics for 10 buckets
 
   Page count statistics
@@ -170,12 +170,12 @@
 - The `freelist` will show the number of free pages, which are free for writing again.
 - The `overflow` column shows the number of blocks that the page spills over into.
 - usage:
-  `bbolt pages [path to the bbolt database]`
+  `boltdb pages [path to the boltdb database]`
 
   Example:
 
   ```bash
-  $bbolt pages ~/default.etcd/member/snap/db
+  $boltdb pages ~/default.etcd/member/snap/db
   ID       TYPE       ITEMS  OVRFLW
   ======== ========== ====== ======
   0        meta       0
@@ -192,8 +192,8 @@
 - usage:
 
   ```bash
-  bolt page [path to the bbolt database] pageid [pageid...]
-  or: bolt page --all [path to the bbolt database]
+  bolt page [path to the boltdb database] pageid [pageid...]
+  or: bolt page --all [path to the boltdb database]
 
   Additional options include:
 
@@ -206,7 +206,7 @@
   Example:
 
   ```bash
-  $bbolt page ~/default.etcd/member/snap/db 3
+  $boltdb page ~/default.etcd/member/snap/db 3
   Page ID:    3
   Page Type:  leaf
   Total Size: 4096 bytes
@@ -233,7 +233,7 @@
 - usage:
 
   ```bash
-  bolt page-item [options] [path to the bbolt database] <pageId> <itemId>
+  bolt page-item [options] [path to the boltdb database] <pageId> <itemId>
   Additional options include:
 
       --key-only
@@ -247,7 +247,7 @@
   Example:
 
   ```bash
-  $bbolt page-item --key-only ~/default.etcd/member/snap/db 3 7
+  $boltdb page-item --key-only ~/default.etcd/member/snap/db 3 7
   "members"
   ```
 
@@ -257,7 +257,7 @@
 
 - Dump prints a hexadecimal dump of one or more given pages.
 - usage:
-  `bolt dump [path to the bbolt database] [pageid...]`
+  `bolt dump [path to the boltdb database] [pageid...]`
 
 ### keys
 
@@ -265,7 +265,7 @@
 - usage:
 
   ```bash
-  bolt keys [path to the bbolt database] [BucketName]
+  bolt keys [path to the boltdb database] [BucketName]
 
   Additional options include:
   --format
@@ -275,7 +275,7 @@
   Example 1:
 
   ```bash
-  $bbolt keys ~/default.etcd/member/snap/db meta
+  $boltdb keys ~/default.etcd/member/snap/db meta
   confState
   consistent_index
   term
@@ -286,7 +286,7 @@
   Example 2:
 
   ```bash
-  $bbolt keys ~/default.etcd/member/snap/db members
+  $boltdb keys ~/default.etcd/member/snap/db members
   8e9e05c52164694d
   ```
 
@@ -299,7 +299,7 @@
 - usage:
   
   ```bash
-  bolt get [path to the bbolt database] [BucketName] [Key]
+  bolt get [path to the boltdb database] [BucketName] [Key]
 
   Additional options include:
   --format
@@ -311,7 +311,7 @@
   Example 1:
 
   ```bash
-  $bbolt get --format=hex ~/default.etcd/member/snap/db meta term
+  $boltdb get --format=hex ~/default.etcd/member/snap/db meta term
   0000000000000004
   ```
 
@@ -320,7 +320,7 @@
   Example 2:
 
   ```bash
-  $bbolt get ~/default.etcd/member/snap/db members 8e9e05c52164694d
+  $boltdb get ~/default.etcd/member/snap/db members 8e9e05c52164694d
   {"id":10276657743932975437,"peerURLs":["http://localhost:2380"],"name":"default","clientURLs":["http://localhost:2379"]}
   ```
 
@@ -332,7 +332,7 @@
 - usage:
 
   ```bash
-  bbolt compact [options] -o [Destination Path] [Source Path]
+  boltdb compact [options] -o [Destination Path] [Source Path]
 
   Additional options include:
 
@@ -344,7 +344,7 @@
   Example:
 
   ```bash
-  $bbolt compact -o ~/db.compact ~/default.etcd/member/snap/db
+  $boltdb compact -o ~/db.compact ~/default.etcd/member/snap/db
   16805888 -> 32768 bytes (gain=512.88x)
   ```
 
@@ -352,7 +352,7 @@
 
 ### bench
 
-- run synthetic benchmark against bbolt database.
+- run synthetic benchmark against boltdb database.
 - usage:
 
     ```bash
@@ -390,7 +390,7 @@
     Example:
 
     ```bash
-    $bbolt bench ~/default.etcd/member/snap/db -batch-size 400 -key-size 16
+    $boltdb bench ~/default.etcd/member/snap/db -batch-size 400 -key-size 16
     # Write	68.523572ms	(68.523µs/op)	(14593 op/sec)
     # Read	1.000015152s	(11ns/op)	(90909090 op/sec)
     ```

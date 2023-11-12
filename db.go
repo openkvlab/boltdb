@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 import (
 	"errors"
@@ -39,7 +39,7 @@ type DB struct {
 	// Put `stats` at the first field to ensure it's 64-bit aligned. Note that
 	// the first word in an allocated struct can be relied upon to be 64-bit
 	// aligned. Refer to https://pkg.go.dev/sync/atomic#pkg-note-BUG. Also
-	// refer to discussion in https://github.com/etcd-io/bbolt/issues/577.
+	// refer to discussion in https://github.com/etcd-io/boltdb/issues/577.
 	stats Stats
 
 	// When enabled, the database will perform a Check() after every commit.
@@ -80,7 +80,7 @@ type DB struct {
 	// https://github.com/boltdb/bolt/issues/284
 	NoGrowSync bool
 
-	// When `true`, bbolt will always load the free pages when opening the DB.
+	// When `true`, boltdb will always load the free pages when opening the DB.
 	// When opening db in write mode, this flag will always automatically
 	// set to `true`.
 	PreLoadFreelist bool
@@ -1224,7 +1224,7 @@ type Options struct {
 	NoFreelistSync bool
 
 	// PreLoadFreelist sets whether to load the free pages when opening
-	// the db file. Note when opening db in write mode, bbolt will always
+	// the db file. Note when opening db in write mode, boltdb will always
 	// load the free pages.
 	PreLoadFreelist bool
 
@@ -1283,7 +1283,7 @@ type Stats struct {
 	// Put `TxStats` at the first field to ensure it's 64-bit aligned. Note
 	// that the first word in an allocated struct can be relied upon to be
 	// 64-bit aligned. Refer to https://pkg.go.dev/sync/atomic#pkg-note-BUG.
-	// Also refer to discussion in https://github.com/etcd-io/bbolt/issues/577.
+	// Also refer to discussion in https://github.com/etcd-io/boltdb/issues/577.
 	TxStats TxStats // global, ongoing stats.
 
 	// Freelist stats

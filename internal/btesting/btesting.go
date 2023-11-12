@@ -44,7 +44,7 @@ func MustCreateDBWithOption(t testing.TB, o *bolt.Options) *DB {
 }
 
 func MustOpenDBWithOption(t testing.TB, f string, o *bolt.Options) *DB {
-	t.Logf("Opening bbolt DB at: %s", f)
+	t.Logf("Opening boltdb DB at: %s", f)
 	if o == nil {
 		o = bolt.DefaultOptions
 	}
@@ -84,7 +84,7 @@ func (db *DB) Close() error {
 		if *statsFlag {
 			db.PrintStats()
 		}
-		db.t.Logf("Closing bbolt DB at: %s", db.f)
+		db.t.Logf("Closing boltdb DB at: %s", db.f)
 		err := db.DB.Close()
 		if err != nil {
 			return err
@@ -114,7 +114,7 @@ func (db *DB) MustReopen() {
 	if db.DB != nil {
 		panic("Please call Close() before MustReopen()")
 	}
-	db.t.Logf("Reopening bbolt DB at: %s", db.f)
+	db.t.Logf("Reopening boltdb DB at: %s", db.f)
 	indb, err := bolt.Open(db.Path(), 0600, db.o)
 	require.NoError(db.t, err)
 	db.DB = indb

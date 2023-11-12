@@ -1,7 +1,7 @@
 //go:build !windows
 // +build !windows
 
-package bbolt_test
+package boltdb_test
 
 import (
 	"fmt"

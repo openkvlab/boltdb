@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ func flock(db *DB, exclusive bool, timeout time.Duration) error {
 		flags |= windows.LOCKFILE_EXCLUSIVE_LOCK
 	}
 	for {
-		// Fix for https://github.com/etcd-io/bbolt/issues/121. Use byte-range
+		// Fix for https://github.com/etcd-io/boltdb/issues/121. Use byte-range
 		// -1..0 as the lock on the database file.
 		var m1 uint32 = (1 << 32) - 1 // -1 in a uint32
 		err := windows.LockFileEx(windows.Handle(db.file.Fd()), flags, 0, 1, 0, &windows.Overlapped{

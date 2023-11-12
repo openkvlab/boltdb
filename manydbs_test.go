@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 import (
 	"crypto/rand"
@@ -11,7 +11,7 @@ import (
 func createDb(t *testing.T) (*DB, func()) {
 	// First, create a temporary directory to be used for the duration of
 	// this test.
-	tempDirName, err := os.MkdirTemp("", "bboltmemtest")
+	tempDirName, err := os.MkdirTemp("", "boltdbmemtest")
 	if err != nil {
 		t.Fatalf("error creating temp dir: %v", err)
 	}
@@ -19,7 +19,7 @@ func createDb(t *testing.T) (*DB, func()) {
 
 	bdb, err := Open(path, 0600, nil)
 	if err != nil {
-		t.Fatalf("error creating bbolt db: %v", err)
+		t.Fatalf("error creating boltdb db: %v", err)
 	}
 
 	cleanup := func() {

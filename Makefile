@@ -42,14 +42,14 @@ lint:
 .PHONY: test
 test:
 	@echo "hashmap freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./internal/...
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./cmd/bbolt
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./internal/...
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./cmd/boltdb
 
 	@echo "array freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./internal/...
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./cmd/bbolt
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./internal/...
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./cmd/boltdb
 
 .PHONY: coverage
 coverage:
@@ -76,8 +76,8 @@ install-gofail:
 .PHONY: test-failpoint
 test-failpoint:
 	@echo "[failpoint] hashmap freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
 
 	@echo "[failpoint] array freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
 

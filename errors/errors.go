@@ -1,5 +1,5 @@
 // Package errors defines the error variables that may be returned
-// during bbolt operations.
+// during boltdb operations.
 package errors
 
 import "errors"

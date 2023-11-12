@@ -21,7 +21,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	bolt "github.com/openkvlab/boltdb"
-	main "github.com/openkvlab/boltdb/cmd/bbolt"
+	main "github.com/openkvlab/boltdb/cmd/boltdb"
 )
 
 // Ensure the "info" command can print information about a database.

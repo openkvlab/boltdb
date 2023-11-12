@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 import (
 	"testing"

@@ -52,7 +52,7 @@ func (o *surgeryBaseOptions) Validate() error {
 func newSurgeryRevertMetaPageCommand() *cobra.Command {
 	var o surgeryBaseOptions
 	revertMetaPageCmd := &cobra.Command{
-		Use:   "revert-meta-page <bbolt-file> [options]",
+		Use:   "revert-meta-page <boltdb-file> [options]",
 		Short: "Revert the meta page to revert the changes performed by the latest transaction",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -119,7 +119,7 @@ func (o *surgeryCopyPageOptions) Validate() error {
 func newSurgeryCopyPageCommand() *cobra.Command {
 	var o surgeryCopyPageOptions
 	copyPageCmd := &cobra.Command{
-		Use:   "copy-page <bbolt-file> [options]",
+		Use:   "copy-page <boltdb-file> [options]",
 		Short: "Copy page from the source page Id to the destination page Id",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -160,7 +160,7 @@ func surgeryCopyPageFunc(srcDBPath string, cfg surgeryCopyPageOptions) error {
 	}
 	if meta.IsFreelistPersisted() {
 		fmt.Fprintf(os.Stdout, "WARNING: the free list might have changed.\n")
-		fmt.Fprintf(os.Stdout, "Please consider executing `./bbolt surgery abandon-freelist ...`\n")
+		fmt.Fprintf(os.Stdout, "Please consider executing `./boltdb surgery abandon-freelist ...`\n")
 	}
 
 	fmt.Fprintf(os.Stdout, "The page %d was successfully copied to page %d\n", cfg.sourcePageId, cfg.destinationPageId)
@@ -191,7 +191,7 @@ func (o *surgeryClearPageOptions) Validate() error {
 func newSurgeryClearPageCommand() *cobra.Command {
 	var o surgeryClearPageOptions
 	clearPageCmd := &cobra.Command{
-		Use:   "clear-page <bbolt-file> [options]",
+		Use:   "clear-page <boltdb-file> [options]",
 		Short: "Clears all elements from the given page, which can be a branch or leaf page",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -229,7 +229,7 @@ func surgeryClearPageFunc(srcDBPath string, cfg surgeryClearPageOptions) error {
 
 	if needAbandonFreelist {
 		fmt.Fprintf(os.Stdout, "WARNING: The clearing has abandoned some pages that are not yet referenced from free list.\n")
-		fmt.Fprintf(os.Stdout, "Please consider executing `./bbolt surgery abandon-freelist ...`\n")
+		fmt.Fprintf(os.Stdout, "Please consider executing `./boltdb surgery abandon-freelist ...`\n")
 	}
 
 	fmt.Fprintf(os.Stdout, "The page (%d) was cleared\n", cfg.pageId)
@@ -266,7 +266,7 @@ func (o *surgeryClearPageElementsOptions) Validate() error {
 func newSurgeryClearPageElementsCommand() *cobra.Command {
 	var o surgeryClearPageElementsOptions
 	clearElementCmd := &cobra.Command{
-		Use:   "clear-page-elements <bbolt-file> [options]",
+		Use:   "clear-page-elements <boltdb-file> [options]",
 		Short: "Clears elements from the given page, which can be a branch or leaf page",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -304,7 +304,7 @@ func surgeryClearPageElementFunc(srcDBPath string, cfg surgeryClearPageElementsO
 
 	if needAbandonFreelist {
 		fmt.Fprintf(os.Stdout, "WARNING: The clearing has abandoned some pages that are not yet referenced from free list.\n")
-		fmt.Fprintf(os.Stdout, "Please consider executing `./bbolt surgery abandon-freelist ...`\n")
+		fmt.Fprintf(os.Stdout, "Please consider executing `./boltdb surgery abandon-freelist ...`\n")
 	}
 
 	fmt.Fprintf(os.Stdout, "All elements in [%d, %d) in page %d were cleared\n", cfg.startElementIdx, cfg.endElementIdx, cfg.pageId)

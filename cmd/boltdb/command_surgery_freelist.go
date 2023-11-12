@@ -27,7 +27,7 @@ func newSurgeryFreelistCommand() *cobra.Command {
 func newSurgeryFreelistAbandonCommand() *cobra.Command {
 	var o surgeryBaseOptions
 	abandonFreelistCmd := &cobra.Command{
-		Use:   "abandon <bbolt-file> [options]",
+		Use:   "abandon <boltdb-file> [options]",
 		Short: "Abandon the freelist from both meta pages",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -63,14 +63,14 @@ func surgeryFreelistAbandonFunc(srcDBPath string, cfg surgeryBaseOptions) error 
 		return fmt.Errorf("abandom-freelist command failed: %w", err)
 	}
 
-	fmt.Fprintf(os.Stdout, "The freelist was abandoned in both meta pages.\nIt may cause some delay on next startup because bbolt needs to scan the whole db to reconstruct the free list.\n")
+	fmt.Fprintf(os.Stdout, "The freelist was abandoned in both meta pages.\nIt may cause some delay on next startup because boltdb needs to scan the whole db to reconstruct the free list.\n")
 	return nil
 }
 
 func newSurgeryFreelistRebuildCommand() *cobra.Command {
 	var o surgeryBaseOptions
 	rebuildFreelistCmd := &cobra.Command{
-		Use:   "rebuild <bbolt-file> [options]",
+		Use:   "rebuild <boltdb-file> [options]",
 		Short: "Rebuild the freelist",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -113,7 +113,7 @@ func surgeryFreelistRebuildFunc(srcDBPath string, cfg surgeryBaseOptions) error 
 		return fmt.Errorf("[freelist rebuild] copy file failed: %w", err)
 	}
 
-	// bboltDB automatically reconstruct & sync freelist in write mode.
+	// boltdbDB automatically reconstruct & sync freelist in write mode.
 	db, err := bolt.Open(cfg.outputDBFilePath, fi.Mode(), &bolt.Options{NoFreelistSync: false})
 	if err != nil {
 		return fmt.Errorf("[freelist rebuild] open db file failed: %w", err)
