@@ -11,7 +11,7 @@ import (
 	bolt "github.com/openkvlab/boltdb"
 	"github.com/openkvlab/boltdb/errors"
 	"github.com/openkvlab/boltdb/internal/btesting"
-	gofail "go.etcd.io/gofail/runtime"
+	gofail "github.com/openkvlab/gofail/runtime"
 )
 
 func TestFailpoint_MapFail(t *testing.T) {
