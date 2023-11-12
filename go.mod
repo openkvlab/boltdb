@@ -1,4 +1,4 @@
-module go.etcd.io/bbolt
+module github.com/openkvlab/boltdb
 
 go 1.21
 

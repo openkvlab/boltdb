@@ -3,7 +3,7 @@ package bbolt
 import (
 	"sort"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // hashmapFreeCount returns count of free pages(hashmap version)

@@ -1,6 +1,6 @@
 # Introduction to bbolt command line
 
-`bbolt` provides a command line utility for inspecting and manipulating bbolt database files. To install bbolt command-line please refer [here](https://github.com/etcd-io/bbolt#installing)
+`bbolt` provides a command line utility for inspecting and manipulating bbolt database files. To install bbolt command-line please refer [here](https://github.com/openkvlab/boltdb#installing)
 
 **Note**: [etcd](https://github.com/etcd-io/etcd) uses bbolt as its backend storage engine. In this document, we take etcd as an example to demonstrate the usage of bbolt commands. Refer to [install etcd](https://etcd.io/docs/v3.5/install/) for installing etcd.
 
@@ -94,7 +94,7 @@
 
 ### buckets
 
-- `buckets` print a list of buckets of Bbolt database is currently having. Find more information on buckets [here](https://github.com/etcd-io/bbolt#using-buckets)
+- `buckets` print a list of buckets of Bbolt database is currently having. Find more information on buckets [here](https://github.com/openkvlab/boltdb#using-buckets)
 - usage:
   `bbolt buckets [path to the bbolt database]`
 

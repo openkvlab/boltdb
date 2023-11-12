@@ -1,10 +1,10 @@
 bbolt
 =====
 
-[![Go Report Card](https://goreportcard.com/badge/go.etcd.io/bbolt?style=flat-square)](https://goreportcard.com/report/go.etcd.io/bbolt)
-[![Go Reference](https://pkg.go.dev/badge/go.etcd.io/bbolt.svg)](https://pkg.go.dev/go.etcd.io/bbolt)
-[![Releases](https://img.shields.io/github/release/etcd-io/bbolt/all.svg?style=flat-square)](https://github.com/etcd-io/bbolt/releases)
-[![LICENSE](https://img.shields.io/github/license/etcd-io/bbolt.svg?style=flat-square)](https://github.com/etcd-io/bbolt/blob/master/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/openkvlab/boltdb?style=flat-square)](https://goreportcard.com/report/github.com/openkvlab/boltdb)
+[![Go Reference](https://pkg.go.dev/badge/github.com/openkvlab/boltdb.svg)](https://pkg.go.dev/github.com/openkvlab/boltdb)
+[![Releases](https://img.shields.io/github/release/openkvlab/boltdb/all.svg?style=flat-square)](https://github.com/openkvlab/boltdb/releases)
+[![LICENSE](https://img.shields.io/github/license/openkvlab/boldb.svg?style=flat-square)](https://github.com/openkvlab/boltdb/blob/main/LICENSE)
 
 bbolt is a fork of [Ben Johnson's][gh_ben] [Bolt][bolt] key/value
 store. The purpose of this fork is to provide the Go community with an active
@@ -77,21 +77,21 @@ New minor versions may add additional features to the API.
 
 To start using Bolt, install Go and run `go get`:
 ```sh
-$ go get go.etcd.io/bbolt@latest
+$ go get github.com/openkvlab/boltdb@latest
 ```
 
 This will retrieve the library and update your `go.mod` and `go.sum` files.
 
 To run the command line utility, execute:
 ```sh
-$ go run go.etcd.io/bbolt/cmd/bbolt@latest
+$ go run github.com/openkvlab/boltdb/cmd/bbolt@latest
 ```
 
 Run `go install` to install the `bbolt` command line utility into
 your `$GOBIN` path, which defaults to `$GOPATH/bin` or `$HOME/go/bin` if the
 `GOPATH` environment variable is not set.
 ```sh
-$ go install go.etcd.io/bbolt/cmd/bbolt@latest
+$ go install github.com/openkvlab/boltdb/cmd/bbolt@latest
 ```
 
 ### Importing bbolt
@@ -99,7 +99,7 @@ $ go install go.etcd.io/bbolt/cmd/bbolt@latest
 To use bbolt as an embedded key-value store, import as:
 
 ```go
-import bolt "go.etcd.io/bbolt"
+import bolt "github.com/openkvlab/boltdb"
 
 db, err := bolt.Open(path, 0600, nil)
 if err != nil {
@@ -122,7 +122,7 @@ package main
 import (
 	"log"
 
-	bolt "go.etcd.io/bbolt"
+	bolt "github.com/openkvlab/boltdb"
 )
 
 func main() {
@@ -587,7 +587,7 @@ this from a read-only transaction, it will perform a hot backup and not block
 your other database reads and writes.
 
 By default, it will use a regular file handle which will utilize the operating
-system's page cache. See the [`Tx`](https://godoc.org/go.etcd.io/bbolt#Tx)
+system's page cache. See the [`Tx`](https://godoc.org/github.com/openkvlab/boltdb#Tx)
 documentation for information about optimizing for larger-than-RAM datasets.
 
 One common use case is to backup over HTTP so you can use tools like `cURL` to

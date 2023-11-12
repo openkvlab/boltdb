@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	bolt "go.etcd.io/bbolt"
-	main "go.etcd.io/bbolt/cmd/bbolt"
-	"go.etcd.io/bbolt/internal/btesting"
-	"go.etcd.io/bbolt/internal/common"
-	"go.etcd.io/bbolt/internal/guts_cli"
+	bolt "github.com/openkvlab/boltdb"
+	main "github.com/openkvlab/boltdb/cmd/bbolt"
+	"github.com/openkvlab/boltdb/internal/btesting"
+	"github.com/openkvlab/boltdb/internal/common"
+	"github.com/openkvlab/boltdb/internal/guts_cli"
 )
 
 func TestSurgery_RevertMetaPage(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"sort"
 	"unsafe"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // txPending holds a list of pgids and corresponding allocation txns

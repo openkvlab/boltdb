@@ -11,8 +11,8 @@ import (
 	"time"
 	"unsafe"
 
-	berrors "go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/common"
+	berrors "github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // The time elapsed between consecutive file locking attempts.

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"runtime"
 
+	"github.com/openkvlab/boltdb/version"
 	"github.com/spf13/cobra"
-	"go.etcd.io/bbolt/version"
 )
 
 func newVersionCobraCommand() *cobra.Command {

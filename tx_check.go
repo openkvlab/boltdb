@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // Check performs several consistency checks on the database for this transaction.

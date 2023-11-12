@@ -71,7 +71,7 @@ gofail-disable: install-gofail
 
 .PHONY: install-gofail
 install-gofail:
-	go install go.etcd.io/gofail
+	go install github.com/openkvlab/gofail
 
 .PHONY: test-failpoint
 test-failpoint:

@@ -3,7 +3,7 @@ package bbolt_test
 import (
 	"testing"
 
-	bolt "go.etcd.io/bbolt"
+	bolt "github.com/openkvlab/boltdb"
 )
 
 func TestSimulateNoFreeListSync_1op_1p(t *testing.T) {

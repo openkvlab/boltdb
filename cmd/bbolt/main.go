@@ -20,10 +20,10 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	bolt "go.etcd.io/bbolt"
-	berrors "go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/common"
-	"go.etcd.io/bbolt/internal/guts_cli"
+	bolt "github.com/openkvlab/boltdb"
+	berrors "github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/common"
+	"github.com/openkvlab/boltdb/internal/guts_cli"
 )
 
 var (
@@ -830,9 +830,9 @@ The following errors can be reported:
         The page type is not "meta", "leaf", "branch", or "freelist".
 
 No errors should occur in your database. However, if for some reason you
-experience corruption, please submit a ticket to the etcd-io/bbolt project page:
+experience corruption, please submit a ticket to the openkvlab/boltdb project page:
 
-  https://github.com/etcd-io/bbolt/issues
+  https://github.com/openkvlab/boltdb/issues
 `, "\n")
 }
 
