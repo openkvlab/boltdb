@@ -2,7 +2,6 @@ package boltdb
 
 import (
 	"math/rand"
-	"os"
 	"reflect"
 	"sort"
 	"testing"
@@ -10,9 +9,6 @@ import (
 
 	"github.com/openkvlab/boltdb/internal/common"
 )
-
-// TestFreelistType is used as a env variable for test to indicate the backend type
-const TestFreelistType = "TEST_FREELIST_TYPE"
 
 // Ensure that a page is added to a transaction's freelist.
 func TestFreelist_free(t *testing.T) {
@@ -181,9 +177,6 @@ func TestFreelist_releaseRange(t *testing.T) {
 
 func TestFreelistHashmap_allocate(t *testing.T) {
 	f := newTestFreelist()
-	if f.freelistType != FreelistMapType {
-		t.Skip()
-	}
 
 	ids := []common.Pgid{3, 4, 5, 6, 7, 9, 12, 13, 18}
 	f.readIDs(ids)
@@ -205,53 +198,6 @@ func TestFreelistHashmap_allocate(t *testing.T) {
 	f.allocate(1, 0)
 	if x := f.free_count(); x != 3 {
 		t.Fatalf("exp=3; got=%v", x)
-	}
-}
-
-// Ensure that a freelist can find contiguous blocks of pages.
-func TestFreelistArray_allocate(t *testing.T) {
-	f := newTestFreelist()
-	if f.freelistType != FreelistArrayType {
-		t.Skip()
-	}
-	ids := []common.Pgid{3, 4, 5, 6, 7, 9, 12, 13, 18}
-	f.readIDs(ids)
-	if id := int(f.allocate(1, 3)); id != 3 {
-		t.Fatalf("exp=3; got=%v", id)
-	}
-	if id := int(f.allocate(1, 1)); id != 6 {
-		t.Fatalf("exp=6; got=%v", id)
-	}
-	if id := int(f.allocate(1, 3)); id != 0 {
-		t.Fatalf("exp=0; got=%v", id)
-	}
-	if id := int(f.allocate(1, 2)); id != 12 {
-		t.Fatalf("exp=12; got=%v", id)
-	}
-	if id := int(f.allocate(1, 1)); id != 7 {
-		t.Fatalf("exp=7; got=%v", id)
-	}
-	if id := int(f.allocate(1, 0)); id != 0 {
-		t.Fatalf("exp=0; got=%v", id)
-	}
-	if id := int(f.allocate(1, 0)); id != 0 {
-		t.Fatalf("exp=0; got=%v", id)
-	}
-	if exp := []common.Pgid{9, 18}; !reflect.DeepEqual(exp, f.getFreePageIDs()) {
-		t.Fatalf("exp=%v; got=%v", exp, f.getFreePageIDs())
-	}
-
-	if id := int(f.allocate(1, 1)); id != 9 {
-		t.Fatalf("exp=9; got=%v", id)
-	}
-	if id := int(f.allocate(1, 1)); id != 18 {
-		t.Fatalf("exp=18; got=%v", id)
-	}
-	if id := int(f.allocate(1, 1)); id != 0 {
-		t.Fatalf("exp=0; got=%v", id)
-	}
-	if exp := []common.Pgid{}; !reflect.DeepEqual(exp, f.getFreePageIDs()) {
-		t.Fatalf("exp=%v; got=%v", exp, f.getFreePageIDs())
 	}
 }
 
@@ -402,9 +348,7 @@ func Test_freelist_mergeWithExist(t *testing.T) {
 	}
 	for _, tt := range tests {
 		f := newTestFreelist()
-		if f.freelistType == FreelistArrayType {
-			t.Skip()
-		}
+
 		f.readIDs(tt.ids)
 
 		f.mergeWithExistingSpan(tt.pgid)
@@ -426,19 +370,11 @@ func Test_freelist_mergeWithExist(t *testing.T) {
 
 // newTestFreelist get the freelist type from env and initial the freelist
 func newTestFreelist() *freelist {
-	freelistType := FreelistArrayType
-	if env := os.Getenv(TestFreelistType); env == string(FreelistMapType) {
-		freelistType = FreelistMapType
-	}
-
-	return newFreelist(freelistType)
+	return newFreelist()
 }
 
 func Test_freelist_hashmapGetFreePageIDs(t *testing.T) {
 	f := newTestFreelist()
-	if f.freelistType == FreelistArrayType {
-		t.Skip()
-	}
 
 	N := int32(100000)
 	fm := make(map[common.Pgid]uint64)
@@ -461,9 +397,6 @@ func Test_freelist_hashmapGetFreePageIDs(t *testing.T) {
 
 func Benchmark_freelist_hashmapGetFreePageIDs(b *testing.B) {
 	f := newTestFreelist()
-	if f.freelistType == FreelistArrayType {
-		b.Skip()
-	}
 
 	N := int32(100000)
 	fm := make(map[common.Pgid]uint64)

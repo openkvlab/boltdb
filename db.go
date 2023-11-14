@@ -18,20 +18,6 @@ import (
 // The time elapsed between consecutive file locking attempts.
 const flockRetryTimeout = 50 * time.Millisecond
 
-// FreelistType is the type of the freelist backend
-type FreelistType string
-
-// TODO(ahrtr): eventually we should (step by step)
-//  1. default to `FreelistMapType`;
-//  2. remove the `FreelistArrayType`, do not export `FreelistMapType`
-//     and remove field `FreelistType' from both `DB` and `Options`;
-const (
-	// FreelistArrayType indicates backend freelist type is array
-	FreelistArrayType = FreelistType("array")
-	// FreelistMapType indicates backend freelist type is hashmap
-	FreelistMapType = FreelistType("hashmap")
-)
-
 // DB represents a collection of buckets persisted to a file on disk.
 // All data access is performed through transactions which can be obtained through the DB.
 // All the functions on DB will return a ErrDatabaseNotOpen if accessed before Open() is called.
@@ -64,13 +50,6 @@ type DB struct {
 	// write performance under normal operation, but requires a full database
 	// re-sync during recovery.
 	NoFreelistSync bool
-
-	// FreelistType sets the backend freelist type. There are two options. Array which is simple but endures
-	// dramatic performance degradation if database is large and fragmentation in freelist is common.
-	// The alternative one is using hashmap, it is faster in almost all circumstances
-	// but it doesn't guarantee that it offers the smallest page id available. In normal case it is safe.
-	// The default type is array
-	FreelistType FreelistType
 
 	// When true, skips the truncate call when growing the database.
 	// Setting this to true is only safe on non-ext3/ext4 systems.
@@ -186,7 +165,6 @@ func Open(path string, mode os.FileMode, options *Options) (*DB, error) {
 	db.MmapFlags = options.MmapFlags
 	db.NoFreelistSync = options.NoFreelistSync
 	db.PreLoadFreelist = options.PreLoadFreelist
-	db.FreelistType = options.FreelistType
 	db.Mlock = options.Mlock
 
 	// Set default values for later DB operations.
@@ -391,7 +369,7 @@ func (db *DB) getPageSizeFromSecondMeta() (int, bool, error) {
 // concurrent accesses being made to the freelist.
 func (db *DB) loadFreelist() {
 	db.freelistLoad.Do(func() {
-		db.freelist = newFreelist(db.FreelistType)
+		db.freelist = newFreelist()
 		if !db.hasSyncedFreelist() {
 			// Reconstruct free list by scanning the DB.
 			db.freelist.readIDs(db.freepages())
@@ -1228,13 +1206,6 @@ type Options struct {
 	// load the free pages.
 	PreLoadFreelist bool
 
-	// FreelistType sets the backend freelist type. There are two options. Array which is simple but endures
-	// dramatic performance degradation if database is large and fragmentation in freelist is common.
-	// The alternative one is using hashmap, it is faster in almost all circumstances
-	// but it doesn't guarantee that it offers the smallest page id available. In normal case it is safe.
-	// The default type is array
-	FreelistType FreelistType
-
 	// Open database in read-only mode. Uses flock(..., LOCK_SH |LOCK_NB) to
 	// grab a shared lock (UNIX).
 	ReadOnly bool
@@ -1273,9 +1244,8 @@ type Options struct {
 // DefaultOptions represent the options used if nil options are passed into Open().
 // No timeout is used which will cause Bolt to wait indefinitely for a lock.
 var DefaultOptions = &Options{
-	Timeout:      0,
-	NoGrowSync:   false,
-	FreelistType: FreelistArrayType,
+	Timeout:    0,
+	NoGrowSync: false,
 }
 
 // Stats represents statistics about the database.

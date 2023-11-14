@@ -235,13 +235,6 @@ func mustOpenDB(t *testing.T, dbPath string, o *bolt.Options) *bolt.DB {
 		o = bolt.DefaultOptions
 	}
 
-	freelistType := bolt.FreelistArrayType
-	if env := os.Getenv("TEST_FREELIST_TYPE"); env == string(bolt.FreelistMapType) {
-		freelistType = bolt.FreelistMapType
-	}
-
-	o.FreelistType = freelistType
-
 	db, err := bolt.Open(dbPath, 0600, o)
 	require.NoError(t, err)
 
@@ -770,29 +763,15 @@ func TestConcurrentRepeatableRead(t *testing.T) {
 	testCases := []struct {
 		name           string
 		noFreelistSync bool
-		freelistType   bolt.FreelistType
 	}{
-		// [array] freelist
-		{
-			name:           "sync array freelist",
-			noFreelistSync: false,
-			freelistType:   bolt.FreelistArrayType,
-		},
-		{
-			name:           "not sync array freelist",
-			noFreelistSync: true,
-			freelistType:   bolt.FreelistArrayType,
-		},
 		// [map] freelist
 		{
 			name:           "sync map freelist",
 			noFreelistSync: false,
-			freelistType:   bolt.FreelistMapType,
 		},
 		{
 			name:           "not sync map freelist",
 			noFreelistSync: true,
-			freelistType:   bolt.FreelistMapType,
 		},
 	}
 
@@ -808,7 +787,6 @@ func TestConcurrentRepeatableRead(t *testing.T) {
 				option = &bolt.Options{
 					PageSize:       4096,
 					NoFreelistSync: tc.noFreelistSync,
-					FreelistType:   tc.freelistType,
 				}
 			)
 
