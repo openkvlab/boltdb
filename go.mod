@@ -1,6 +1,6 @@
 module github.com/openkvlab/boltdb
 
-go 1.21
+go 1.22
 
 require (
 	github.com/openkvlab/gofail v0.0.0-20231112153152-e5760a3ef08b
