@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"runtime"
-	"sort"
 	"sync"
 	"time"
 	"unsafe"
@@ -764,35 +763,25 @@ func (db *DB) beginRWTx() (*Tx, error) {
 	t := &Tx{writable: true}
 	t.init(db)
 	db.rwtx = t
-	db.freePages()
+	db.freelist.release(db.readonlyTxids())
 	return t, nil
 }
 
-// freePages releases any pages associated with closed read-only transactions.
-func (db *DB) freePages() {
-	// Free all pending pages prior to earliest open transaction.
-	sort.Sort(txsById(db.txs))
-	minid := common.Txid(0xFFFFFFFFFFFFFFFF)
-	if len(db.txs) > 0 {
-		minid = db.txs[0].meta.Txid()
+// readonlyTxids return all the readonly Txids, which doesn't have duplicated txid.
+func (db *DB) readonlyTxids() []common.Txid {
+	var (
+		rtxs   []common.Txid
+		rtxMap = make(map[common.Txid]struct{})
+	)
+	for _, rtx := range db.txs {
+		txid := rtx.meta.Txid()
+		if _, ok := rtxMap[txid]; !ok {
+			rtxs = append(rtxs, txid)
+			rtxMap[rtx.meta.Txid()] = struct{}{}
+		}
 	}
-	if minid > 0 {
-		db.freelist.release(minid - 1)
-	}
-	// Release unused txid extents.
-	for _, t := range db.txs {
-		db.freelist.releaseRange(minid, t.meta.Txid()-1)
-		minid = t.meta.Txid() + 1
-	}
-	db.freelist.releaseRange(minid, common.Txid(0xFFFFFFFFFFFFFFFF))
-	// Any page both allocated and freed in an extent is safe to release.
+	return rtxs
 }
-
-type txsById []*Tx
-
-func (t txsById) Len() int           { return len(t) }
-func (t txsById) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
-func (t txsById) Less(i, j int) bool { return t[i].meta.Txid() < t[j].meta.Txid() }
 
 // removeTx removes a transaction from the database.
 func (db *DB) removeTx(tx *Tx) {
