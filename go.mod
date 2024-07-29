@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/openkvlab/gofail v0.0.0-20231112153152-e5760a3ef08b
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/sync v0.7.0
