@@ -3,8 +3,8 @@ package surgeon
 import (
 	"fmt"
 
-	"go.etcd.io/bbolt/internal/common"
-	"go.etcd.io/bbolt/internal/guts_cli"
+	"github.com/openkvlab/boltdb/internal/common"
+	"github.com/openkvlab/boltdb/internal/guts_cli"
 )
 
 func CopyPage(path string, srcPage common.Pgid, target common.Pgid) error {
@@ -22,7 +22,7 @@ func ClearPage(path string, pgId common.Pgid) (bool, error) {
 
 // ClearPageElements supports clearing elements in both branch and leaf
 // pages. Note if the ${abandonFreelist} is true, the freelist may be cleaned
-// in the meta pages in the following two cases, and bbolt needs to scan the
+// in the meta pages in the following two cases, and boltdb needs to scan the
 // db to reconstruct free list. It may cause some delay on next startup,
 // depending on the db size.
 //  1. Any branch elements are cleared;
@@ -30,7 +30,7 @@ func ClearPage(path string, pgId common.Pgid) (bool, error) {
 //
 // Usually ${abandonFreelist} defaults to false, it means it will not clear the
 // freelist in meta pages automatically. Users will receive a warning message
-// to remind them to explicitly execute `bbolt surgery abandom-freelist`
+// to remind them to explicitly execute `boltdb surgery abandom-freelist`
 // afterwards; the first return parameter will be true in such case. But if
 // the freelist isn't synced at all, no warning message will be displayed.
 func ClearPageElements(path string, pgId common.Pgid, start, end int, abandonFreelist bool) (bool, error) {

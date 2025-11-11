@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const ENV_VERIFY = "BBOLT_VERIFY"
+const ENV_VERIFY = "BOLTDB_VERIFY"
 
 type VerificationType string
 

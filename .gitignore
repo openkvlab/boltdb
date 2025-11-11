@@ -6,7 +6,7 @@ cover.out
 cover-*.out
 /.idea
 *.iml
-/bbolt
-/cmd/bbolt/bbolt
+/boltdb
+/cmd/boltdb/boltdb
 .DS_Store
 

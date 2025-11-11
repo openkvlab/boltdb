@@ -1,11 +1,11 @@
-package bbolt
+package boltdb
 
 import (
 	"bytes"
 	"fmt"
 	"sort"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // node represents an in-memory, deserialized page.

@@ -42,14 +42,14 @@ lint:
 .PHONY: test
 test:
 	@echo "hashmap freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./internal/...
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./cmd/bbolt/...
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./internal/...
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./cmd/boltdb/...
 
 	@echo "array freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./internal/...
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./cmd/bbolt/...
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./internal/...
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./cmd/boltdb/...
 
 .PHONY: coverage
 coverage:
@@ -61,14 +61,12 @@ coverage:
 	TEST_FREELIST_TYPE=array go test -v -timeout ${TESTFLAGS_TIMEOUT} \
 		-coverprofile cover-freelist-array.out -covermode atomic
 
-BOLT_CMD=bbolt
-
 build:
-	go build -o bin/${BOLT_CMD} ./cmd/${BOLT_CMD}
+	go build -o bin/boltdb ./cmd/boltdb
 
 .PHONY: clean
 clean: # Clean binaries
-	rm -f ./bin/${BOLT_CMD}
+	rm -f ./bin/boltdb
 
 .PHONY: gofail-enable
 gofail-enable:
@@ -81,10 +79,10 @@ gofail-disable:
 .PHONY: test-failpoint
 test-failpoint:
 	@echo "[failpoint] hashmap freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
 
 	@echo "[failpoint] array freelist test"
-	BBOLT_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
+	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout 30m ./tests/failpoint
 
 .PHONY: test-robustness # Running robustness tests requires root permission for now
 # TODO: Remove sudo once we fully migrate to the prow infrastructure

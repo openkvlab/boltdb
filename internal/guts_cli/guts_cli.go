@@ -1,6 +1,6 @@
 package guts_cli
 
-// Low level access to pages / data-structures of the bbolt file.
+// Low level access to pages / data-structures of the boltdb file.
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 var (

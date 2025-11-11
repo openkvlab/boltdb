@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 import (
 	"fmt"
@@ -9,8 +9,8 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // fdatasync flushes written data to a file descriptor.

@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"sort"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // pidSet holds the set of starting pgids which have the same span size

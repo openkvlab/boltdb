@@ -1,4 +1,4 @@
-package bbolt_test
+package boltdb_test
 
 import (
 	"bytes"
@@ -13,9 +13,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	bolt "go.etcd.io/bbolt"
-	"go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/btesting"
+	bolt "github.com/openkvlab/boltdb"
+	"github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/btesting"
 )
 
 // TestCursor_RepeatOperations verifies that a cursor can continue to

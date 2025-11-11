@@ -14,7 +14,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // TestFreelistType is used as a env variable for test to indicate the backend type

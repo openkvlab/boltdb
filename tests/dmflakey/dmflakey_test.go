@@ -16,7 +16,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sys/unix"
 
-	testutils "go.etcd.io/bbolt/tests/utils"
+	testutils "github.com/openkvlab/boltdb/tests/utils"
 )
 
 func TestMain(m *testing.M) {

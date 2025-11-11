@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 import (
 	"errors"
@@ -10,9 +10,9 @@ import (
 	"time"
 	"unsafe"
 
-	berrors "go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/common"
-	fl "go.etcd.io/bbolt/internal/freelist"
+	berrors "github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/common"
+	fl "github.com/openkvlab/boltdb/internal/freelist"
 )
 
 // The time elapsed between consecutive file locking attempts.
@@ -74,7 +74,7 @@ type DB struct {
 	// https://github.com/boltdb/bolt/issues/284
 	NoGrowSync bool
 
-	// When `true`, bbolt will always load the free pages when opening the DB.
+	// When `true`, boltdb will always load the free pages when opening the DB.
 	// When opening db in write mode, this flag will always automatically
 	// set to `true`.
 	PreLoadFreelist bool
@@ -213,9 +213,9 @@ func Open(path string, mode os.FileMode, options *Options) (db *DB, err error) {
 		lg.Infof("Opening db file (%s) with mode %s and with options: %s", path, mode, options)
 		defer func() {
 			if err != nil {
-				lg.Errorf("Opening bbolt db (%s) failed: %v", path, err)
+				lg.Errorf("Opening bolt db (%s) failed: %v", path, err)
 			} else {
-				lg.Infof("Opening bbolt db (%s) successfully", path)
+				lg.Infof("Opening bolt db (%s) successfully", path)
 			}
 		}()
 	}
@@ -1077,12 +1077,12 @@ func safelyCall(fn func(*Tx) error, tx *Tx) (err error) {
 // then it allows you to force the database file to sync against the disk.
 func (db *DB) Sync() (err error) {
 	if lg := db.Logger(); lg != discardLogger {
-		lg.Debugf("Syncing bbolt db (%s)", db.path)
+		lg.Debugf("Syncing bolt db (%s)", db.path)
 		defer func() {
 			if err != nil {
-				lg.Errorf("[GOOS: %s, GOARCH: %s] syncing bbolt db (%s) failed: %v", runtime.GOOS, runtime.GOARCH, db.path, err)
+				lg.Errorf("[GOOS: %s, GOARCH: %s] syncing bolt db (%s) failed: %v", runtime.GOOS, runtime.GOARCH, db.path, err)
 			} else {
-				lg.Debugf("Syncing bbolt db (%s) successfully", db.path)
+				lg.Debugf("Syncing bolt db (%s) successfully", db.path)
 			}
 		}()
 	}
@@ -1293,7 +1293,7 @@ type Options struct {
 	NoFreelistSync bool
 
 	// PreLoadFreelist sets whether to load the free pages when opening
-	// the db file. Note when opening db in write mode, bbolt will always
+	// the db file. Note when opening db in write mode, boltdb will always
 	// load the free pages.
 	PreLoadFreelist bool
 
@@ -1347,7 +1347,7 @@ type Options struct {
 	// used memory can't be reclaimed. (UNIX only)
 	Mlock bool
 
-	// Logger is the logger used for bbolt.
+	// Logger is the logger used for boltdb.
 	Logger Logger
 
 	// NoStatistics turns off statistics collection, Stats method will

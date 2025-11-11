@@ -1,4 +1,4 @@
-package bbolt_test
+package boltdb_test
 
 import (
 	crand "crypto/rand"
@@ -9,9 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"go.etcd.io/bbolt"
-	"go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/btesting"
+	"github.com/openkvlab/boltdb"
+	"github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/btesting"
 )
 
 func TestTx_MoveBucket(t *testing.T) {
@@ -143,13 +143,13 @@ func TestTx_MoveBucket(t *testing.T) {
 	for _, tc := range testCases {
 
 		t.Run(tc.name, func(*testing.T) {
-			db := btesting.MustCreateDBWithOption(t, &bbolt.Options{PageSize: 4096})
+			db := btesting.MustCreateDBWithOption(t, &boltdb.Options{PageSize: 4096})
 
 			dumpBucketBeforeMoving := filepath.Join(t.TempDir(), "dbBeforeMove")
 			dumpBucketAfterMoving := filepath.Join(t.TempDir(), "dbAfterMove")
 
 			t.Log("Creating sample db and populate some data")
-			err := db.Update(func(tx *bbolt.Tx) error {
+			err := db.Update(func(tx *boltdb.Tx) error {
 				srcBucket := prepareBuckets(t, tx, tc.srcBucketPath...)
 				dstBucket := prepareBuckets(t, tx, tc.dstBucketPath...)
 
@@ -176,7 +176,7 @@ func TestTx_MoveBucket(t *testing.T) {
 			require.NoError(t, err)
 
 			t.Log("Moving bucket")
-			err = db.Update(func(tx *bbolt.Tx) error {
+			err = db.Update(func(tx *boltdb.Tx) error {
 				srcBucket := prepareBuckets(t, tx, tc.srcBucketPath...)
 				dstBucket := prepareBuckets(t, tx, tc.dstBucketPath...)
 
@@ -221,11 +221,11 @@ func TestBucket_MoveBucket_DiffDB(t *testing.T) {
 	dstBucketPath := []string{"db1", "db2"}
 	bucketToMove := "bucketToMove"
 
-	var srcBucket *bbolt.Bucket
+	var srcBucket *boltdb.Bucket
 
 	t.Log("Creating source bucket and populate some data")
-	srcDB := btesting.MustCreateDBWithOption(t, &bbolt.Options{PageSize: 4096})
-	err := srcDB.Update(func(tx *bbolt.Tx) error {
+	srcDB := btesting.MustCreateDBWithOption(t, &boltdb.Options{PageSize: 4096})
+	err := srcDB.Update(func(tx *boltdb.Tx) error {
 		srcBucket = prepareBuckets(t, tx, srcBucketPath...)
 		return nil
 	})
@@ -235,8 +235,8 @@ func TestBucket_MoveBucket_DiffDB(t *testing.T) {
 	}()
 
 	t.Log("Creating target bucket and populate some data")
-	dstDB := btesting.MustCreateDBWithOption(t, &bbolt.Options{PageSize: 4096})
-	err = dstDB.Update(func(tx *bbolt.Tx) error {
+	dstDB := btesting.MustCreateDBWithOption(t, &boltdb.Options{PageSize: 4096})
+	err = dstDB.Update(func(tx *boltdb.Tx) error {
 		prepareBuckets(t, tx, dstBucketPath...)
 		return nil
 	})
@@ -254,7 +254,7 @@ func TestBucket_MoveBucket_DiffDB(t *testing.T) {
 	srcBucket = prepareBuckets(t, sTx, srcBucketPath...)
 
 	t.Log("Moving the sub-bucket in a separate RWTx")
-	err = dstDB.Update(func(tx *bbolt.Tx) error {
+	err = dstDB.Update(func(tx *boltdb.Tx) error {
 		dstBucket := prepareBuckets(t, tx, dstBucketPath...)
 		mErr := srcBucket.MoveBucket([]byte(bucketToMove), dstBucket)
 		require.Equal(t, errors.ErrDifferentDB, mErr)
@@ -296,12 +296,12 @@ func TestBucket_MoveBucket_DiffTx(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			var srcBucket *bbolt.Bucket
-			var dstBucket *bbolt.Bucket
+			var srcBucket *boltdb.Bucket
+			var dstBucket *boltdb.Bucket
 
 			t.Log("Creating source and target buckets and populate some data")
-			db := btesting.MustCreateDBWithOption(t, &bbolt.Options{PageSize: 4096})
-			err := db.Update(func(tx *bbolt.Tx) error {
+			db := btesting.MustCreateDBWithOption(t, &boltdb.Options{PageSize: 4096})
+			err := db.Update(func(tx *boltdb.Tx) error {
 				srcBucket = prepareBuckets(t, tx, tc.srcBucketPath...)
 				dstBucket = prepareBuckets(t, tx, tc.dstBucketPath...)
 				return nil
@@ -328,7 +328,7 @@ func TestBucket_MoveBucket_DiffTx(t *testing.T) {
 			dstBucket = prepareBuckets(t, dTx, tc.dstBucketPath...)
 
 			t.Log("Moving the sub-bucket")
-			err = db.View(func(tx *bbolt.Tx) error {
+			err = db.View(func(tx *boltdb.Tx) error {
 				mErr := srcBucket.MoveBucket([]byte(tc.bucketToMove), dstBucket)
 				require.Equal(t, tc.expectedErr, mErr)
 
@@ -341,8 +341,8 @@ func TestBucket_MoveBucket_DiffTx(t *testing.T) {
 
 // prepareBuckets opens the bucket chain. For each bucket in the chain,
 // open it if existed, otherwise create it and populate sample data.
-func prepareBuckets(t testing.TB, tx *bbolt.Tx, buckets ...string) *bbolt.Bucket {
-	var bk *bbolt.Bucket
+func prepareBuckets(t testing.TB, tx *boltdb.Tx, buckets ...string) *boltdb.Bucket {
+	var bk *boltdb.Bucket
 
 	for _, key := range buckets {
 		if childBucket := openBucket(tx, bk, key); childBucket == nil {
@@ -354,14 +354,14 @@ func prepareBuckets(t testing.TB, tx *bbolt.Tx, buckets ...string) *bbolt.Bucket
 	return bk
 }
 
-func openBucket(tx *bbolt.Tx, bk *bbolt.Bucket, bucketToOpen string) *bbolt.Bucket {
+func openBucket(tx *boltdb.Tx, bk *boltdb.Bucket, bucketToOpen string) *boltdb.Bucket {
 	if bk == nil {
 		return tx.Bucket([]byte(bucketToOpen))
 	}
 	return bk.Bucket([]byte(bucketToOpen))
 }
 
-func createBucketAndPopulateData(t testing.TB, tx *bbolt.Tx, bk *bbolt.Bucket, bucketName string) *bbolt.Bucket {
+func createBucketAndPopulateData(t testing.TB, tx *boltdb.Tx, bk *boltdb.Bucket, bucketName string) *boltdb.Bucket {
 	if bk == nil {
 		newBucket, err := tx.CreateBucket([]byte(bucketName))
 		require.NoError(t, err, "failed to create bucket %s", bucketName)
@@ -375,7 +375,7 @@ func createBucketAndPopulateData(t testing.TB, tx *bbolt.Tx, bk *bbolt.Bucket, b
 	return newBucket
 }
 
-func populateSampleDataInBucket(t testing.TB, bk *bbolt.Bucket, n int) {
+func populateSampleDataInBucket(t testing.TB, bk *boltdb.Bucket, n int) {
 	var min, max = 1, 1024
 
 	for i := 0; i < n; i++ {

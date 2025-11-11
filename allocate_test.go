@@ -1,10 +1,10 @@
-package bbolt
+package boltdb
 
 import (
 	"testing"
 
-	"go.etcd.io/bbolt/internal/common"
-	"go.etcd.io/bbolt/internal/freelist"
+	"github.com/openkvlab/boltdb/internal/common"
+	"github.com/openkvlab/boltdb/internal/freelist"
 )
 
 func TestTx_allocatePageStats(t *testing.T) {

@@ -1,15 +1,17 @@
-bbolt
+boltdb
 =====
 
-[![Go Report Card](https://goreportcard.com/badge/go.etcd.io/bbolt?style=flat-square)](https://goreportcard.com/report/go.etcd.io/bbolt)
-[![Go Reference](https://pkg.go.dev/badge/go.etcd.io/bbolt.svg)](https://pkg.go.dev/go.etcd.io/bbolt)
-[![Releases](https://img.shields.io/github/release/etcd-io/bbolt/all.svg?style=flat-square)](https://github.com/etcd-io/bbolt/releases)
-[![LICENSE](https://img.shields.io/github/license/etcd-io/bbolt.svg?style=flat-square)](https://github.com/etcd-io/bbolt/blob/master/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/openkvlab/boltdb?style=flat-square)](https://goreportcard.com/report/github.com/openkvlab/boltdb)
+[![Go Reference](https://pkg.go.dev/badge/github.com/openkvlab/boltdb.svg)](https://pkg.go.dev/github.com/openkvlab/boltdb)
+[![Releases](https://img.shields.io/github/release/openkvlab/boltdb/all.svg?style=flat-square)](https://github.com/openkvlab/boltdb/releases)
+[![LICENSE](https://img.shields.io/github/license/openkvlab/boltdb.svg?style=flat-square)](https://github.com/openkvlab/boltdb/blob/main/LICENSE)
 
-bbolt is a fork of [Ben Johnson's][gh_ben] [Bolt][bolt] key/value
+> This repository was forked from [etcd-io/bbolt](https://github.com/etcd-io/bbolt). The README will be updated later.
+
+boltdb is a fork of [Ben Johnson's][gh_ben] [Bolt][bolt] key/value
 store. The purpose of this fork is to provide the Go community with an active
 maintenance and development target for Bolt; the goal is improved reliability
-and stability. bbolt includes bug fixes, performance enhancements, and features
+and stability. boltdb includes bug fixes, performance enhancements, and features
 not found in Bolt while preserving backwards compatibility with the Bolt API.
 
 Bolt is a pure Go key/value store inspired by [Howard Chu's][hyc_symas]
@@ -36,7 +38,7 @@ Shopify and Heroku use Bolt-backed services every day.
 
 ## Project versioning
 
-bbolt uses [semantic versioning](http://semver.org).
+boltdb uses [semantic versioning](http://semver.org).
 API should not change between patch and minor releases.
 New minor versions may add additional features to the API.
 
@@ -76,31 +78,31 @@ New minor versions may add additional features to the API.
 
 ### Installing
 
-To start using `bbolt`, install Go and run `go get`:
+To start using `boltdb`, install Go and run `go get`:
 ```sh
-$ go get go.etcd.io/bbolt@latest
+$ go get github.com/openkvlab/boltdb@latest
 ```
 
 This will retrieve the library and update your `go.mod` and `go.sum` files.
 
 To run the command line utility, execute:
 ```sh
-$ go run go.etcd.io/bbolt/cmd/bbolt@latest
+$ go run github.com/openkvlab/boltdb/cmd/boltdb@latest
 ```
 
-Run `go install` to install the `bbolt` command line utility into
+Run `go install` to install the `boltdb` command line utility into
 your `$GOBIN` path, which defaults to `$GOPATH/bin` or `$HOME/go/bin` if the
 `GOPATH` environment variable is not set.
 ```sh
-$ go install go.etcd.io/bbolt/cmd/bbolt@latest
+$ go install github.com/openkvlab/boltdb/cmd/boltdb@latest
 ```
 
-### Importing bbolt
+### Importing boltdb
 
-To use bbolt as an embedded key-value store, import as:
+To use boltdb as an embedded key-value store, import as:
 
 ```go
-import bolt "go.etcd.io/bbolt"
+import bolt "github.com/openkvlab/boltdb"
 
 db, err := bolt.Open(path, 0600, nil)
 if err != nil {
@@ -123,7 +125,7 @@ package main
 import (
 	"log"
 
-	bolt "go.etcd.io/bbolt"
+	bolt "github.com/openkvlab/boltdb"
 )
 
 func main() {
@@ -608,7 +610,7 @@ this from a read-only transaction, it will perform a hot backup and not block
 your other database reads and writes.
 
 By default, it will use a regular file handle which will utilize the operating
-system's page cache. See the [`Tx`](https://godoc.org/go.etcd.io/bbolt#Tx)
+system's page cache. See the [`Tx`](https://godoc.org/github.com/openkvlab/boltdb#Tx)
 documentation for information about optimizing for larger-than-RAM datasets.
 
 One common use case is to backup over HTTP so you can use tools like `cURL` to
@@ -952,7 +954,7 @@ them via pull request.
 
 ## Known Issues
 
-- bbolt might run into data corruption issue on Linux when the feature
+- boltdb might run into data corruption issue on Linux when the feature
   [ext4: fast commit](https://lwn.net/Articles/842385/), which was introduced in
   linux kernel version v5.10, is enabled. The fixes to the issue were included in
   linux kernel version v5.17, please refer to links below,
@@ -1012,7 +1014,7 @@ Below is a list of public, open source projects that use Bolt:
 * [mbuckets](https://github.com/abhigupta912/mbuckets) - A Bolt wrapper that allows easy operations on multi level (nested) buckets.
 * [MetricBase](https://github.com/msiebuhr/MetricBase) - Single-binary version of Graphite.
 * [MuLiFS](https://github.com/dankomiocevic/mulifs) - Music Library Filesystem creates a filesystem to organise your music files.
-* [NATS](https://github.com/nats-io/nats-streaming-server) - NATS Streaming uses bbolt for message and metadata storage.
+* [NATS](https://github.com/nats-io/nats-streaming-server) - NATS Streaming uses boltdb for message and metadata storage.
 * [Portainer](https://github.com/portainer/portainer) - A lightweight service delivery platform for containerized applications that can be used to manage Docker, Swarm, Kubernetes and ACI environments.
 * [Prometheus Annotation Server](https://github.com/oliver006/prom_annotation_server) - Annotation server for PromDash & Prometheus service monitoring system.
 * [Rain](https://github.com/cenkalti/rain) - BitTorrent client and library.

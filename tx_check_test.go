@@ -1,4 +1,4 @@
-package bbolt_test
+package boltdb_test
 
 import (
 	"fmt"
@@ -7,17 +7,17 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"go.etcd.io/bbolt"
-	"go.etcd.io/bbolt/internal/btesting"
-	"go.etcd.io/bbolt/internal/common"
-	"go.etcd.io/bbolt/internal/guts_cli"
+	"github.com/openkvlab/boltdb"
+	"github.com/openkvlab/boltdb/internal/btesting"
+	"github.com/openkvlab/boltdb/internal/common"
+	"github.com/openkvlab/boltdb/internal/guts_cli"
 )
 
 func TestTx_Check_CorruptPage(t *testing.T) {
 	bucketName := []byte("data")
 
 	t.Log("Creating db file.")
-	db := btesting.MustCreateDBWithOption(t, &bbolt.Options{PageSize: 4096})
+	db := btesting.MustCreateDBWithOption(t, &boltdb.Options{PageSize: 4096})
 
 	// Each page can hold roughly 20 key/values pair, so 100 such
 	// key/value pairs will consume about 5 leaf pages.
@@ -31,11 +31,11 @@ func TestTx_Check_CorruptPage(t *testing.T) {
 	victimPageId, validPageIds := corruptRandomLeafPageInBucket(t, db.DB, bucketName)
 
 	t.Log("Running consistency check.")
-	vErr := db.View(func(tx *bbolt.Tx) error {
+	vErr := db.View(func(tx *boltdb.Tx) error {
 		var cErrs []error
 
 		t.Log("Check corrupted page.")
-		errChan := tx.Check(bbolt.WithPageId(uint64(victimPageId)))
+		errChan := tx.Check(boltdb.WithPageId(uint64(victimPageId)))
 		for cErr := range errChan {
 			cErrs = append(cErrs, cErr)
 		}
@@ -44,7 +44,7 @@ func TestTx_Check_CorruptPage(t *testing.T) {
 		t.Log("Check valid pages.")
 		cErrs = cErrs[:0]
 		for _, pgId := range validPageIds {
-			errChan = tx.Check(bbolt.WithPageId(uint64(pgId)))
+			errChan = tx.Check(boltdb.WithPageId(uint64(pgId)))
 			for cErr := range errChan {
 				cErrs = append(cErrs, cErr)
 			}
@@ -64,9 +64,9 @@ func TestTx_Check_WithNestBucket(t *testing.T) {
 	parentBucketName := []byte("parentBucket")
 
 	t.Log("Creating db file.")
-	db := btesting.MustCreateDBWithOption(t, &bbolt.Options{PageSize: 4096})
+	db := btesting.MustCreateDBWithOption(t, &boltdb.Options{PageSize: 4096})
 
-	err := db.Update(func(tx *bbolt.Tx) error {
+	err := db.Update(func(tx *boltdb.Tx) error {
 		pb, bErr := tx.CreateBucket(parentBucketName)
 		if bErr != nil {
 			return bErr
@@ -101,10 +101,10 @@ func TestTx_Check_WithNestBucket(t *testing.T) {
 	bucketRootPageId := mustGetBucketRootPage(t, db.DB, parentBucketName)
 
 	t.Logf("Running consistency check starting from pageId: %d", bucketRootPageId)
-	vErr := db.View(func(tx *bbolt.Tx) error {
+	vErr := db.View(func(tx *boltdb.Tx) error {
 		var cErrs []error
 
-		errChan := tx.Check(bbolt.WithPageId(uint64(bucketRootPageId)))
+		errChan := tx.Check(boltdb.WithPageId(uint64(bucketRootPageId)))
 		for cErr := range errChan {
 			cErrs = append(cErrs, cErr)
 		}
@@ -121,7 +121,7 @@ func TestTx_Check_WithNestBucket(t *testing.T) {
 }
 
 // corruptRandomLeafPage corrupts one random leaf page.
-func corruptRandomLeafPageInBucket(t testing.TB, db *bbolt.DB, bucketName []byte) (victimPageId common.Pgid, validPageIds []common.Pgid) {
+func corruptRandomLeafPageInBucket(t testing.TB, db *boltdb.DB, bucketName []byte) (victimPageId common.Pgid, validPageIds []common.Pgid) {
 	bucketRootPageId := mustGetBucketRootPage(t, db, bucketName)
 	bucketRootPage, _, err := guts_cli.ReadPage(db.Path(), uint64(bucketRootPageId))
 	require.NoError(t, err)
@@ -153,9 +153,9 @@ func corruptRandomLeafPageInBucket(t testing.TB, db *bbolt.DB, bucketName []byte
 }
 
 // mustGetBucketRootPage returns the root page for the provided bucket.
-func mustGetBucketRootPage(t testing.TB, db *bbolt.DB, bucketName []byte) common.Pgid {
+func mustGetBucketRootPage(t testing.TB, db *boltdb.DB, bucketName []byte) common.Pgid {
 	var rootPageId common.Pgid
-	_ = db.View(func(tx *bbolt.Tx) error {
+	_ = db.View(func(tx *boltdb.Tx) error {
 		b := tx.Bucket(bucketName)
 		require.NotNil(t, b)
 		rootPageId = b.RootPage()

@@ -6,7 +6,7 @@ import (
 	"sort"
 	"unsafe"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 type txPending struct {

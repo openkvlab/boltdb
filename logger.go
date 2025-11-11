@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 // See https://github.com/etcd-io/raft/blob/main/logger.go
 import (

@@ -1,4 +1,4 @@
-package bbolt_test
+package boltdb_test
 
 import (
 	"bytes"
@@ -21,10 +21,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	bolt "go.etcd.io/bbolt"
-	berrors "go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/btesting"
-	"go.etcd.io/bbolt/internal/common"
+	bolt "github.com/openkvlab/boltdb"
+	berrors "github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/btesting"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // pageSize is the size of one page in the data file.
@@ -1469,7 +1469,7 @@ func TestDBUnmap(t *testing.T) {
 	require.NoError(t, db.DB.Close())
 
 	// Ignore the following error:
-	// Error: copylocks: call of reflect.ValueOf copies lock value: go.etcd.io/bbolt.DB contains sync.Once contains sync.Mutex (govet)
+	// Error: copylocks: call of reflect.ValueOf copies lock value: github.com/openkvlab/boltdb.DB contains sync.Once contains sync.Mutex (govet)
 	//nolint:govet
 	v := reflect.ValueOf(*db.DB)
 	dataref := v.FieldByName("dataref")
@@ -1579,7 +1579,7 @@ func TestDB_MaxSizeExceededCanOpen(t *testing.T) {
 	require.GreaterOrEqual(t, newSz, minimumSizeForTest, "unexpected new file size: %d. Expected at least %d", newSz, minimumSizeForTest)
 
 	// Now try to re-open the database with an extremely small max size
-	t.Logf("Reopening bbolt DB at: %s", path)
+	t.Logf("Reopening bolt DB at: %s", path)
 	db, err = btesting.OpenDBWithOption(t, path, &bolt.Options{
 		MaxSize: 1,
 	})
@@ -1613,7 +1613,7 @@ func TestDB_MaxSizeExceededCanOpenWithHighMmap(t *testing.T) {
 	require.GreaterOrEqual(t, newSz, minimumSizeForTest, "unexpected new file size: %d. Expected at least %d", newSz, minimumSizeForTest)
 
 	// Now try to re-open the database with an extremely small max size
-	t.Logf("Reopening bbolt DB at: %s", path)
+	t.Logf("Reopening bolt DB at: %s", path)
 	db, err = btesting.OpenDBWithOption(t, path, &bolt.Options{
 		MaxSize:         1,
 		InitialMmapSize: int(minimumSizeForTest) * 2,
@@ -1648,7 +1648,7 @@ func TestDB_MaxSizeExceededDoesNotGrow(t *testing.T) {
 
 	// Now try to re-open the database with an extremely small max size and
 	// an initial mmap size to be greater than the actual file size, forcing an illegal grow on open
-	t.Logf("Reopening bbolt DB at: %s", path)
+	t.Logf("Reopening bolt DB at: %s", path)
 	_, err = btesting.OpenDBWithOption(t, path, &bolt.Options{
 		MaxSize:         1,
 		InitialMmapSize: int(newSz) * 2,

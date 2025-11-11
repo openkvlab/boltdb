@@ -1,6 +1,6 @@
 //go:build !windows
 
-package bbolt
+package boltdb
 
 import "golang.org/x/sys/unix"
 

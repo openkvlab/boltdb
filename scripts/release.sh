@@ -35,7 +35,7 @@ function main {
   MINOR_VERSION=$(echo "${RELEASE_VERSION}" | cut -d. -f 1-2)
   RELEASE_BRANCH="release-${MINOR_VERSION}"
 
-  REPOSITORY=${REPOSITORY:-"git@github.com:etcd-io/bbolt.git"}
+  REPOSITORY=${REPOSITORY:-"git@github.com:etcd-io/boltdb.git"}
 
   local remote_tag_exists
   remote_tag_exists=$(git ls-remote "${REPOSITORY}" "refs/tags/${VERSION}" | grep -c "${VERSION}" || true)
@@ -45,14 +45,14 @@ function main {
   fi
 
   # Set up release directory.
-  local reldir="/tmp/bbolt-release-${VERSION}"
+  local reldir="/tmp/boltdb-release-${VERSION}"
   echo "Preparing temporary directory: ${reldir}"
-  if [ ! -d "${reldir}/bbolt" ]; then
+  if [ ! -d "${reldir}/boltdb" ]; then
     mkdir -p "${reldir}"
     cd "${reldir}"
     git clone "${REPOSITORY}" --branch "${RELEASE_BRANCH}" --depth 1
   fi
-  cd "${reldir}/bbolt" || exit 2
+  cd "${reldir}/boltdb" || exit 2
   git checkout "${RELEASE_BRANCH}" || exit 2
   git fetch origin
   git reset --hard "origin/${RELEASE_BRANCH}"
@@ -62,7 +62,7 @@ function main {
   if [[ "${source_version}" != "${RELEASE_VERSION}" ]]; then
      source_minor_version=$(echo "${source_version}" | cut -d. -f 1-2)
      if [[ "${source_minor_version}" != "${MINOR_VERSION}" ]]; then
-       echo "Wrong bbolt minor version in version.go. Expected ${MINOR_VERSION} but got ${source_minor_version}. Aborting."
+       echo "Wrong boltdb minor version in version.go. Expected ${MINOR_VERSION} but got ${source_minor_version}. Aborting."
        exit 1
      fi
   fi

@@ -1,12 +1,12 @@
-package bbolt
+package boltdb
 
 import (
 	"bytes"
 	"fmt"
 	"sort"
 
-	"go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // Cursor represents an iterator that can traverse over all key/value pairs in a bucket

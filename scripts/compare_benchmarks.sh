@@ -32,9 +32,9 @@ function bench() {
   make build
 
   for _ in $(seq "$BENCH_COUNT"); do
-    echo ./bin/bbolt bench --gobench-output --profile-mode n ${BENCH_PARAMETERS}
+    echo ./bin/boltdb bench --gobench-output --profile-mode n ${BENCH_PARAMETERS}
     # shellcheck disable=SC2086
-    ./bin/bbolt bench --gobench-output --profile-mode n ${BENCH_PARAMETERS} >> "${output_file}"
+    ./bin/boltdb bench --gobench-output --profile-mode n ${BENCH_PARAMETERS} >> "${output_file}"
   done
 }
 

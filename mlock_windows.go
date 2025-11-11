@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 // mlock locks memory of db file
 func mlock(_ *DB, _ int) error {

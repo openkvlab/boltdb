@@ -1,10 +1,10 @@
-package bbolt
+package boltdb
 
 import (
 	"testing"
 	"unsafe"
 
-	"go.etcd.io/bbolt/internal/common"
+	"github.com/openkvlab/boltdb/internal/common"
 )
 
 // Ensure that a node can insert a key/value.

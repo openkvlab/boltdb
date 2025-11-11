@@ -1,16 +1,16 @@
 package surgeon
 
-// Library contains raw access to bbolt files for sake of testing or fixing of corrupted files.
+// Library contains raw access to boltdb files for sake of testing or fixing of corrupted files.
 //
-// The library must not be used bbolt btree - just by CLI or tests.
+// The library must not be used boltdb btree - just by CLI or tests.
 // It's not optimized for performance.
 
 import (
 	"bytes"
 	"fmt"
 
-	"go.etcd.io/bbolt/internal/common"
-	"go.etcd.io/bbolt/internal/guts_cli"
+	"github.com/openkvlab/boltdb/internal/common"
+	"github.com/openkvlab/boltdb/internal/guts_cli"
 )
 
 type XRay struct {

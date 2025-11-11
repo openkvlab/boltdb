@@ -1,4 +1,4 @@
-package bbolt
+package boltdb
 
 import (
 	"golang.org/x/sys/unix"

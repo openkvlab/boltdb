@@ -23,7 +23,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sys/unix"
 
-	"go.etcd.io/bbolt/tests/dmflakey"
+	"github.com/openkvlab/boltdb/tests/dmflakey"
 )
 
 var panicFailpoints = []string{
@@ -145,7 +145,7 @@ func doPowerFailure(t *testing.T, du time.Duration, fsType dmflakey.FSType, mkfs
 
 	dbPath := filepath.Join(root, "boltdb")
 
-	args := []string{"bbolt", "bench",
+	args := []string{"boltdb", "bench",
 		"--work", // keep the database
 		"--path", dbPath,
 		"--count=1000000000",
@@ -191,13 +191,13 @@ func doPowerFailure(t *testing.T, du time.Duration, fsType dmflakey.FSType, mkfs
 		t.Logf("random pick failpoint: %s", targetFp)
 		activeFailpoint(t, fpURL, targetFp, "panic")
 	} else {
-		t.Log("kill bbolt")
+		t.Log("kill boltdb")
 		assert.NoError(t, cmd.Process.Kill())
 	}
 
 	select {
 	case <-time.After(10 * time.Second):
-		t.Log("bbolt is supposed to be already stopped, but actually not yet; forcibly kill it")
+		t.Log("boltdb is supposed to be already stopped, but actually not yet; forcibly kill it")
 		assert.NoError(t, cmd.Process.Kill())
 	case err := <-errCh:
 		require.Error(t, err)
@@ -209,8 +209,8 @@ func doPowerFailure(t *testing.T, du time.Duration, fsType dmflakey.FSType, mkfs
 	t.Logf("db size: %d", st.Size())
 
 	t.Logf("verify data")
-	output, err := exec.Command("bbolt", "check", dbPath).CombinedOutput()
-	require.NoError(t, err, "bbolt check output: %s", string(output))
+	output, err := exec.Command("boltdb", "check", dbPath).CombinedOutput()
+	require.NoError(t, err, "boltdb check output: %s", string(output))
 }
 
 // activeFailpoint actives the failpoint by http.

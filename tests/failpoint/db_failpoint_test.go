@@ -8,13 +8,13 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
-
-	bolt "go.etcd.io/bbolt"
-	"go.etcd.io/bbolt/errors"
-	"go.etcd.io/bbolt/internal/btesting"
-	"go.etcd.io/bbolt/internal/common"
-	"go.etcd.io/bbolt/internal/guts_cli"
 	gofail "go.etcd.io/gofail/runtime"
+
+	bolt "github.com/openkvlab/boltdb"
+	"github.com/openkvlab/boltdb/errors"
+	"github.com/openkvlab/boltdb/internal/btesting"
+	"github.com/openkvlab/boltdb/internal/common"
+	"github.com/openkvlab/boltdb/internal/guts_cli"
 )
 
 func TestFailpoint_MapFail(t *testing.T) {
@@ -161,9 +161,9 @@ func TestFailpoint_LackOfDiskSpace(t *testing.T) {
 
 // TestIssue72 reproduces issue 72.
 //
-// When bbolt is processing a `Put` invocation, the key might be concurrently
+// When boltdb is processing a `Put` invocation, the key might be concurrently
 // updated by the application which calls the `Put` API (although it shouldn't).
-// It might lead to a situation that bbolt use an old key to find a proper
+// It might lead to a situation that boltdb use an old key to find a proper
 // position to insert the key/value pair, but actually inserts a new key.
 // Eventually it might break the rule that all keys should be sorted. In a
 // worse case, it might cause page elements to point to already freed pages.
@@ -228,7 +228,7 @@ func TestIssue72(t *testing.T) {
 
 	require.NoError(t, gofail.Disable("beforeBucketPut"))
 
-	// bbolt inserts 100 into last branch page. Since there are two `1`
+	// boltdb inserts 100 into last branch page. Since there are two `1`
 	// keys in branch, spill operation will update first `1` pointer and
 	// then last one won't be updated and continues to point to freed page.
 	//
