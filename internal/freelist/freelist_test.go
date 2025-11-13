@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
-	"os"
 	"reflect"
 	"slices"
 	"sort"
@@ -16,9 +15,6 @@ import (
 
 	"github.com/openkvlab/boltdb/internal/common"
 )
-
-// TestFreelistType is used as a env variable for test to indicate the backend type
-const TestFreelistType = "TEST_FREELIST_TYPE"
 
 // Ensure that a page is added to a transaction's freelist.
 func TestFreelist_free(t *testing.T) {
@@ -527,7 +523,6 @@ func TestFreelist_E2E_SerDe_AcrossImplementations(t *testing.T) {
 
 			for n, loadFreeList := range map[string]Interface{
 				"hashmap": NewHashMapFreelist(),
-				"array":   NewArrayFreelist(),
 			} {
 				t.Run(n, func(t *testing.T) {
 					loadFreeList.Read(p)
@@ -614,9 +609,5 @@ func Test_freelist_ReadIDs_and_getFreePageIDs(t *testing.T) {
 
 // newTestFreelist get the freelist type from env and initial the freelist
 func newTestFreelist() Interface {
-	if env := os.Getenv(TestFreelistType); env == "hashmap" {
-		return NewHashMapFreelist()
-	}
-
-	return NewArrayFreelist()
+	return NewHashMapFreelist()
 }

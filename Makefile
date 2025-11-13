@@ -42,24 +42,15 @@ lint:
 .PHONY: test
 test:
 	@echo "hashmap freelist test"
-	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
-	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./internal/...
-	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=hashmap go test -v ${TESTFLAGS} ./cmd/boltdb/...
-
-	@echo "array freelist test"
-	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
-	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./internal/...
-	BOLTDB_VERIFY=all TEST_FREELIST_TYPE=array go test -v ${TESTFLAGS} ./cmd/boltdb/...
+	BOLTDB_VERIFY=all go test -v ${TESTFLAGS} -timeout ${TESTFLAGS_TIMEOUT}
+	BOLTDB_VERIFY=all go test -v ${TESTFLAGS} ./internal/...
+	BOLTDB_VERIFY=all go test -v ${TESTFLAGS} ./cmd/boltdb/...
 
 .PHONY: coverage
 coverage:
 	@echo "hashmap freelist test"
-	TEST_FREELIST_TYPE=hashmap go test -v -timeout ${TESTFLAGS_TIMEOUT} \
+	go test -v -timeout ${TESTFLAGS_TIMEOUT} \
 		-coverprofile cover-freelist-hashmap.out -covermode atomic
-
-	@echo "array freelist test"
-	TEST_FREELIST_TYPE=array go test -v -timeout ${TESTFLAGS_TIMEOUT} \
-		-coverprofile cover-freelist-array.out -covermode atomic
 
 build:
 	go build -o bin/boltdb ./cmd/boltdb

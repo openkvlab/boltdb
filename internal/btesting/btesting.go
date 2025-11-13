@@ -18,8 +18,6 @@ import (
 var statsFlag = flag.Bool("stats", false, "show performance stats")
 
 const (
-	// TestFreelistType is used as an env variable for test to indicate the backend type.
-	TestFreelistType = "TEST_FREELIST_TYPE"
 	// TestEnableStrictMode is used to enable strict check by default after opening each DB.
 	TestEnableStrictMode = "TEST_ENABLE_STRICT_MODE"
 )
@@ -55,13 +53,6 @@ func OpenDBWithOption(t testing.TB, f string, o *bolt.Options) (*DB, error) {
 	if o == nil {
 		o = bolt.DefaultOptions
 	}
-
-	freelistType := bolt.FreelistArrayType
-	if env := os.Getenv(TestFreelistType); env == string(bolt.FreelistMapType) {
-		freelistType = bolt.FreelistMapType
-	}
-
-	o.FreelistType = freelistType
 
 	db, err := bolt.Open(f, 0600, o)
 	if err != nil {
