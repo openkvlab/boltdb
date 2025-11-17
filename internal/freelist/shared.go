@@ -2,7 +2,6 @@ package freelist
 
 import (
 	"fmt"
-	"math"
 	"sort"
 	"unsafe"
 
@@ -10,9 +9,8 @@ import (
 )
 
 type txPending struct {
-	ids              []common.Pgid
-	alloctx          []common.Txid // txids allocating the ids
-	lastReleaseBegin common.Txid   // beginning txid of last matching releaseRange
+	ids     []common.Pgid
+	alloctx []common.Txid // txids allocating the page ids
 }
 
 type shared struct {
@@ -139,66 +137,36 @@ func (t txIDx) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
 func (t txIDx) Less(i, j int) bool { return t[i] < t[j] }
 
 func (t *shared) ReleasePendingPages() {
-	// Free all pending pages prior to the earliest open transaction.
-	sort.Sort(txIDx(t.readonlyTXIDs))
-	minid := common.Txid(math.MaxUint64)
-	if len(t.readonlyTXIDs) > 0 {
-		minid = t.readonlyTXIDs[0]
-	}
-	if minid > 0 {
-		t.release(minid - 1)
-	}
-	// Release unused txid extents.
-	for _, tid := range t.readonlyTXIDs {
-		t.releaseRange(minid, tid-1)
-		minid = tid + 1
-	}
-	t.releaseRange(minid, common.Txid(math.MaxUint64))
-	// Any page both allocated and freed in an extent is safe to release.
-}
-
-func (t *shared) release(txid common.Txid) {
-	m := make(common.Pgids, 0)
-	for tid, txp := range t.pending {
-		if tid <= txid {
-			// Move transaction's pending pages to the available freelist.
-			// Don't remove from the cache since the page is still free.
-			m = append(m, txp.ids...)
-			delete(t.pending, tid)
-		}
-	}
-	t.mergeSpans(m)
-}
-
-func (t *shared) releaseRange(begin, end common.Txid) {
-	if begin > end {
-		return
-	}
-	m := common.Pgids{}
-	for tid, txp := range t.pending {
-		if tid < begin || tid > end {
-			continue
-		}
-		// Don't recompute freed pages if ranges haven't updated.
-		if txp.lastReleaseBegin == begin {
-			continue
-		}
+	var m common.Pgids
+	for ftxid, txp := range t.pending {
 		for i := 0; i < len(txp.ids); i++ {
-			if atx := txp.alloctx[i]; atx < begin || atx > end {
-				continue
+			atxid := txp.alloctx[i]
+
+			safe2Release := true
+			for _, rtxid := range t.readonlyTXIDs {
+				// If a free page is visible to any readonly TXN, then we
+				// can't completely release the page.
+				if atxid <= rtxid && rtxid < ftxid {
+					safe2Release = false
+					break
+				}
 			}
-			m = append(m, txp.ids[i])
-			txp.ids[i] = txp.ids[len(txp.ids)-1]
-			txp.ids = txp.ids[:len(txp.ids)-1]
-			txp.alloctx[i] = txp.alloctx[len(txp.alloctx)-1]
-			txp.alloctx = txp.alloctx[:len(txp.alloctx)-1]
-			i--
+
+			if safe2Release {
+				m = append(m, txp.ids[i])
+				txp.ids[i] = txp.ids[len(txp.ids)-1]
+				txp.ids = txp.ids[:len(txp.ids)-1]
+				txp.alloctx[i] = txp.alloctx[len(txp.alloctx)-1]
+				txp.alloctx = txp.alloctx[:len(txp.alloctx)-1]
+				i--
+			}
 		}
-		txp.lastReleaseBegin = begin
+
 		if len(txp.ids) == 0 {
-			delete(t.pending, tid)
+			delete(t.pending, ftxid)
 		}
 	}
+
 	t.mergeSpans(m)
 }
 
