@@ -71,12 +71,6 @@ type Interface interface {
 	// pendingPageIds returns all pending pages by transaction id.
 	pendingPageIds() map[common.Txid]*txPending
 
-	// release moves all page ids for a transaction id (or older) to the freelist.
-	release(txId common.Txid)
-
-	// releaseRange moves pending pages allocated within an extent [begin,end] to the free list.
-	releaseRange(begin, end common.Txid)
-
 	// mergeSpans is merging the given pages into the freelist
 	mergeSpans(ids common.Pgids)
 }
