@@ -64,6 +64,27 @@ func (t *shared) Free(txid common.Txid, p *common.Page) {
 	}
 	allocTxid, ok := t.allocs[p.Id()]
 	common.Verify(func() {
+		// When a writing transaction frees a page, that page must have been
+		// allocated by one of previous committed transactions.
+		//
+		// Pages allocated during the current transaction can only come from
+		// two sources:
+		//   1. The committed freelist
+		//   2. Extending the database file (by remapping it to a larger size)
+		//
+		// If the current transaction fails to commit, we do **not** need to
+		// return these newly allocated pages to the freelist:
+		//   • For pages taken from the freelist: on rollback, we simply reload
+		//     the freelist from the last committed state — the pages automatically
+		//     become free again.
+		//   • For pages obtained by growing the file: since the meta page was
+		//     never updated, the new region remains invisible to all transactions
+		//     (including future write transactions). The space is not lost — it
+		//     will be reused the next time the database actually needs to grow.
+		//
+		// Additionally, before the current transaction commits, none of its
+		// newly allocated pages are visible to any concurrent read-only
+		// transactions, preserving full isolation (repeatable read).
 		if allocTxid == txid {
 			panic(fmt.Sprintf("free: freed page (%d) was allocated by the same transaction (%d)", p.Id(), txid))
 		}
@@ -100,7 +121,11 @@ func (t *shared) Rollback(txid common.Txid) {
 			// Pending free aborted; restore page back to alloc list.
 			t.allocs[pgid] = tx
 		} else {
-			// A writing TXN should never free a page which was allocated by itself.
+			// Since a writing transaction will never free a page which was
+			// allocated by itself, so when rollback, for all the pages which
+			// were freed by current transaction, they must have been allocated
+			// by previous transactions. It's impossible that they are allocated
+			// by current transaction.
 			panic(fmt.Sprintf("rollback: freed page (%d) was allocated by the same transaction (%d)", pgid, txid))
 		}
 	}

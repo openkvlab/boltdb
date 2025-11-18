@@ -1140,7 +1140,13 @@ func (db *DB) allocate(txid common.Txid, count int) (*common.Page, error) {
 		return p, nil
 	}
 
-	// Resize mmap() if we're at the end.
+	// Extend the database file by remapping it to a larger size.
+	// We don't add these new pages into the pgid -> txid mapping.
+	// It isn't a problem because we will have to ensure all existing
+	// readonly transactions to complete before the mmap can be
+	// successful. The allocating txids will be all 0 related to
+	// such pages for any new readonly transactions, it means
+	// such pages are visible to any new readonly transactions.
 	p.SetId(db.rwtx.meta.Pgid())
 	var minsz = int((p.Id()+common.Pgid(count))+1) * db.pageSize
 	if minsz >= db.datasz {
